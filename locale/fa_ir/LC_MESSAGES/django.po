@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-30 09:27+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: account/admin.py:13
+msgid "Personal info"
+msgstr ""
+
+#: account/admin.py:14
+msgid "Permissions"
+msgstr ""
+
+#: account/admin.py:17
+msgid "Important dates"
+msgstr ""
+
+#: account/apps.py:8
+msgid "account"
+msgstr ""
+
+#: account/models.py:38
+msgid "username"
+msgstr ""
+
+#: account/models.py:39
+msgid "password"
+msgstr ""
+
+#: account/models.py:41
+msgid "email"
+msgstr ""
+
+#: account/models.py:42
+msgid "firstname"
+msgstr ""
+
+#: account/models.py:43
+msgid "lastname"
+msgstr ""
+
+#: account/models.py:44
+msgid "is_active"
+msgstr ""
+
+#: account/models.py:45
+msgid "is_staff"
+msgstr ""
+
+#: account/models.py:46
+msgid "registered_time"
+msgstr ""
+
+#: account/models.py:47
+msgid "last_login"
+msgstr ""
+
+#: account/models.py:48
+msgid "date_joined"
+msgstr ""
+
+#: account/models.py:63
+msgid "user"
+msgstr ""
+
+#: account/models.py:64
+msgid "users"
+msgstr ""
+
+#: account/validators.py:10
+msgid "Enter a valid phone number. This value may contain only numbers"
+msgstr ""
+
+#: account/validators.py:17
+#, python-format
+msgid "%(password)s must be more that 5 digit"
+msgstr ""
+
+#: lib/base_model.py:15
+msgid "active"
+msgstr ""
+
+#: lib/base_model.py:16
+msgid "created_time"
+msgstr ""
+
+#: lib/base_model.py:17
+msgid "modified_time"
+msgstr ""

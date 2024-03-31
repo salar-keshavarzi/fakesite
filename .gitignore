@@ -1,0 +1,9 @@
+.idea/
+clothing-store/
+*.pyc
+*.log
+*.pot
+media/
+local_*.py
+*.sqlite3
+__pycache__/
