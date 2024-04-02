@@ -1,4 +1,5 @@
 from django.db import models
+# from django.db.models.aggregates import
 from lib.base_model import BaseModel
 from account.models import UserModel
 from django.utils.translation import gettext_lazy as _
@@ -7,13 +8,18 @@ from product.models import Product, Inventory
 
 
 class Basket(BaseModel):
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='baskets')
 
-    # def get_total_price(self):
-    #     self.basket_lines.all()
+    def get_total_price(self):
+        total_price = 0
+        basket_lines = BasketLine.objects.filter(basket=self)
+        for line in basket_lines:
+            total_price += (line.product.get_final_price() * line.quantity)
+
+    def get_basket_lines(self):
+        return BasketLine.objects.filter(basket=self)
 
     def __str__(self):
-        return f"{str(self.user)}-basket"
+        return f"{self.id}-basket"
 
     class Meta:
         verbose_name = _('basket')

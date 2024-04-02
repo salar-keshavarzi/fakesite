@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'account',
     'product',
     'activity',
-    'basket'
+    'basket',
+    'manager'
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+AUTH_USER_MODEL = 'account.UserModel'
 
 # AUTH_PASSWORD_VALIDATORS = [
 #     {
@@ -108,4 +110,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'account.UserModel'

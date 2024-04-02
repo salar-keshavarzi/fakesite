@@ -1,5 +1,7 @@
 from PIL import Image
 from django.db import models
+from django.db.models import F
+
 from lib.base_model import BaseModel
 from django.utils.translation import gettext_lazy as _
 
@@ -22,8 +24,17 @@ class Product(BaseModel):
     discount = models.PositiveIntegerField(default=0, verbose_name=_('discount'))
 
     @classmethod
-    def search(cls, search_input):
-        cls.objects.filter(title)
+    def search(cls, product_title):
+        cls.objects.filter(title__contains=product_title)
+
+    @classmethod
+    def get_recent_adds(cls):
+        return cls.objects.order_by('-created_time')[:20]
+
+    @classmethod
+    def get_offers(cls):
+        return cls.objects.annotate(discount_percent=F('discount') / F('first_price') * 100).order_by(
+            '-discount_percent')[:12]
 
     def get_final_price(self):
         if self.inventories.filter(quantity__gt=0).exists():
