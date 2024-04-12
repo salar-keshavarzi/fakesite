@@ -1,0 +1,9 @@
+{% load index_tags %}
+{% get_sliders as sliders %}
+<div class="splide__track">
+    <ul class="splide__list">
+        {% for slider in sliders %}
+            <img src="{{ slider.image.url }}" alt="" class="splide__slide" data-splide-interval="5000">
+        {% endfor %}
+    </ul>
+</div>

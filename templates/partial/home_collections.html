@@ -1,0 +1,6 @@
+{% load index_tags %}
+{% get_collections as collections %}
+
+{% for collection in collections %}
+    <a href="#" class="collection-item"><img src="{{ collection.image.url }}" alt=""><span>{{ collection.category.title }}</span></a>
+{% endfor %}

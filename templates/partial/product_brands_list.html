@@ -1,0 +1,8 @@
+{% load product_list_tags %}
+{% get_brands as brands %}
+<div class="content">
+    <a class="item" href="#">همه</a>
+    {% for brand in brands %}
+        <a class="item" href="#">{{ brand.title }}</a>
+    {% endfor %}
+</div>

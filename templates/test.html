@@ -1,0 +1,15 @@
+{% load index_tags %}
+{% get_story_categories as categories %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="background-color: red">
+<h1>Product Image Upload Form</h1>
+{% for category in categories %}
+    <p>{{ category.title }}</p>
+{% endfor %}
+</body>
+</html>

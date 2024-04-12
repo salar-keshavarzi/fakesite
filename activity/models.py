@@ -47,7 +47,7 @@ class Support(BaseModel):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='supports')
     message = models.TextField(null=False, blank=False, verbose_name=_('message'))
     response = models.TextField(null=True, blank=True, verbose_name=_('response'))
-    is_answered = models.BooleanField(default=False, verbose_name=_('answered'))
+    is_answered = models.BooleanField(default=False, editable=False, verbose_name=_('answered'))
 
     def __str__(self):
         return f"{str(self.user)}-support"

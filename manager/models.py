@@ -1,7 +1,7 @@
 from django.db import models
 from lib.base_model import BaseModel
 from django.utils.translation import gettext_lazy as _
-
+from django.core.validators import FileExtensionValidator
 from product.models import Product, Category
 
 
@@ -81,7 +81,6 @@ class Collection(BaseModel):
 
 
 class Slider(BaseModel):
-    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.SET_NULL, related_name='sliders')
     image = models.ImageField(upload_to='collections/', verbose_name=_('image'))
     size = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, editable=False,
                                verbose_name=_('size (MB)'))
@@ -94,7 +93,7 @@ class Slider(BaseModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.product}-slider"
+        return f"{self.id}-slider"
 
     class Meta:
         verbose_name = _('slider')

@@ -91,7 +91,8 @@ class Address(BaseModel):
 
 class BlockUser(BaseModel):
     phone_number = models.CharField(max_length=11, unique=True, verbose_name=_('phone number'))
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='blocks', null=True, blank=True)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='blocks', null=True, blank=True,
+                             editable=False)
 
     def save(self, *args, **kwargs):
         user = UserModel.objects.filter(username=self.phone_number).first()

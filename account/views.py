@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
 
+from product.models import Product, ProductImage
+
 
 # @login_required
 def test(request):
-    print(request.user.get_basket())
-    return HttpResponse('test')
+    images = ProductImage.objects.all()
+    return render(request, template_name='test.html', context={'images': images})

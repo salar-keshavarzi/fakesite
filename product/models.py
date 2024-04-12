@@ -1,13 +1,14 @@
-from PIL import Image
+import uuid
 from django.db import models
-from django.db.models import F
-
+from django.db.models import F, ExpressionWrapper, IntegerField, Sum, BooleanField, Case, When
 from lib.base_model import BaseModel
 from django.utils.translation import gettext_lazy as _
+from lib.utils import attach_logo
+from lib.base_model import CustomImageField
 
 
 class Category(BaseModel):
-    title = models.CharField(max_length=48, blank=True, null=True, verbose_name=_('category title'))
+    title = models.CharField(max_length=48, unique=True, verbose_name=_('category title'))
 
     def __str__(self):
         return self.title
@@ -17,24 +18,53 @@ class Category(BaseModel):
         verbose_name_plural = _('categories')
 
 
+class Brand(BaseModel):
+    title = models.CharField(max_length=48, unique=True, verbose_name=_('brand title'))
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('brand')
+        verbose_name_plural = _('brands')
+
+
+class ProductManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        # return qs.prefetch_related('inventories').annotate(is_available=Sum('inventories__quantity', output_field=BooleanField())).order_by('-is_available')
+        return qs.prefetch_related('inventories').annotate(
+            total_quantity=Sum('inventories__quantity', output_field=IntegerField())).annotate(
+            is_available=Case(When(total_quantity__gt=0, then=True), default=False,
+                              output_field=BooleanField())).order_by('-is_available')
+
+
 class Product(BaseModel):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
     category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL, related_name='products')
     title = models.CharField(max_length=64, blank=True, null=True, verbose_name=_('product title'))
     first_price = models.PositiveIntegerField(default=0, verbose_name=_('first price'))
     discount = models.PositiveIntegerField(default=0, verbose_name=_('discount'))
+    brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brands')
+    visit_count = models.PositiveIntegerField(default=0, verbose_name=_('visit count'))
+    buy_count = models.PositiveIntegerField(default=0, verbose_name=_('buy count'))
+    objects = ProductManager()
 
     @classmethod
     def search(cls, product_title):
-        cls.objects.filter(title__contains=product_title)
+        return cls.objects.filter(title__contains=product_title)[:10]
 
     @classmethod
     def get_recent_adds(cls):
-        return cls.objects.order_by('-created_time')[:20]
+        return cls.objects.annotate(discount_percent=ExpressionWrapper(100 * F('discount') / F('first_price'),
+                                                                       output_field=IntegerField())).order_by(
+            '-is_available', '-created_time')[:20]
 
     @classmethod
     def get_offers(cls):
-        return cls.objects.annotate(discount_percent=F('discount') / F('first_price') * 100).order_by(
-            '-discount_percent')[:12]
+        return cls.objects.annotate(discount_percent=ExpressionWrapper(100 * F('discount') / F('first_price'),
+                                                                       output_field=IntegerField())).order_by(
+            '-is_available', '-discount_percent')[:12]
 
     def get_final_price(self):
         if self.inventories.filter(quantity__gt=0).exists():
@@ -44,19 +74,28 @@ class Product(BaseModel):
         return 0
 
     def is_discounted(self):
-        if self.discount > 0:
+        if self.discount:
             return True
-        return None
+        return False
 
     def get_image(self):
-        main_image = self.images.filter(is_main=True).first()
+        main_image = ProductImage.objects.filter(product=self).order_by('-is_main').first()
         if main_image:
-            return main_image
-        else:
-            return self.images.first()
+            return main_image.image
+        return None
+
+    def get_image_url(self):
+        image = self.get_image()
+        if image:
+            return image.url
+        return None
 
     def __str__(self):
         return self.title
+
+    def get_total_quantity(self):
+        result = Inventory.objects.filter(product=self).aggregate(total_quantity=Sum('quantity'))
+        return result.get('total_quantity', 0)
 
     class Meta:
         verbose_name = _('product')
@@ -78,17 +117,18 @@ class Attribute(BaseModel):
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='products/', blank=True, null=True, verbose_name=_('image'))
-    size = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, verbose_name=_('size (MB)'))
+    image = CustomImageField(upload_to='products/', null=True, process_function=attach_logo, verbose_name=_('image'))
+    size = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, editable=False,
+                               verbose_name=_('size (MB)'))
     is_main = models.BooleanField(default=False, verbose_name=_('is main image'))
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        # image = Image.open(self.image.path)
-        image_size = self.image.size
-        size_in_mb = image_size / 1048576
-        self.size = round(size_in_mb, 2)
-        super().save(*args, **kwargs)
+        if self.image:
+            image_size = self.image.size
+            size_in_mb = image_size / 1048576
+            self.size = round(size_in_mb, 2)
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{str(self.product)} - image"
@@ -99,7 +139,7 @@ class ProductImage(BaseModel):
 
 
 class Color(BaseModel):
-    name = models.CharField(max_length=16, verbose_name=_('color name'))
+    name = models.CharField(max_length=16, verbose_name=_('color name'), unique=True)
     code = models.CharField(max_length=9, default='#fff', verbose_name=_('color code (hex)'))
 
     def __str__(self):
@@ -111,7 +151,7 @@ class Color(BaseModel):
 
 
 class Size(BaseModel):
-    name = models.CharField(max_length=16, verbose_name=_('size'))
+    name = models.CharField(max_length=16, verbose_name=_('size'), unique=True)
 
     def __str__(self):
         return self.name

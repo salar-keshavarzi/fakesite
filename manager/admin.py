@@ -48,7 +48,7 @@ class CollectionAdmin(ManagerAdmin):
 
 @register(Slider)
 class SliderAdmin(ManagerAdmin):
-    list_display = ('id', 'product', 'size', 'is_active')
+    list_display = ('id', 'size', 'is_active')
     list_filter = ('is_active',)
     ordering = ('-is_active',)
 

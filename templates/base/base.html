@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}روژی شاپ{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/general.css' %}">
+    <script src="{% static 'js/general.js' %}"></script>
+    <link rel="icon" href="{% static 'icons/ico.png' %}">
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    {% block links %}{% endblock %}
+</head>
+<body id="body">
+<div class="main-container">
+    {% include 'base/header.html' %}
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+</div>
+{% include 'base/footer.html' %}
+{% block pageBottom %}{% endblock %}
+</body>
+</html>

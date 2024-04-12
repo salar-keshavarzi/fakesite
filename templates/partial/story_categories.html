@@ -1,0 +1,10 @@
+{% load index_tags %}
+{% get_story_categories as story_categories %}
+<ul>
+    {% for story_category in story_categories %}
+        <li class="item" data-storyCategory="{{ story_category.id }}">
+            <img src="{{ story_category.image.url }}" alt="">
+            <h4 class="title">{{ story_category.title }}</h4>
+        </li>
+    {% endfor %}
+</ul>
