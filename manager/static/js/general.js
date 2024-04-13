@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const isAvailable = dropdown.querySelector(`a[data-id='${item.id}']`)
                         if (!isAvailable) {
                             let itemElement = document.createElement('a')
-                            itemElement.setAttribute('href', '#')
+                            itemElement.setAttribute('href', window.location.origin + '/product/' + item.id + '/')
                             itemElement.setAttribute('class', 'item')
                             itemElement.setAttribute('data-id', item.id)
                             let imageElement = document.createElement('img')
@@ -106,6 +106,18 @@ const getReq = async (uri, type = 1) => {
         throw err;
     })
 }
+const postReq = async (uri, data=null, type=1) => {
+    let url = uri
+    if (type !== 1) {
+        url = baseUrl + uri
+    }
+    return await fetch(url, {method:"POST", body:JSON.stringify(data)}).then(response => {
+        return response.json();
+    }).catch(err => {
+        console.error(err);
+        throw err;
+    })
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const sideMenuOpenBtn = document.getElementById("side-menu-btn")
@@ -137,18 +149,18 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    const userNavigationContainer = document.querySelector('.user-navigate-section')
-    const activeNavigationBtn = document.querySelector('.active-navigation-btn')
-    activeNavigationBtn.onclick = () => {
-        userNavigationContainer.classList.toggle('active')
-        if (userNavigationContainer.classList.contains('active')) {
-            activeNavigationBtn.innerHTML = 'بستن منوی کاربری'
-        } else {
-            activeNavigationBtn.innerHTML = 'نمایش منوی کاربری'
-        }
-    }
-})
+// document.addEventListener('DOMContentLoaded', () => {
+//     const userNavigationContainer = document.querySelector('.user-navigate-section')
+//     const activeNavigationBtn = document.querySelector('.active-navigation-btn')
+//     activeNavigationBtn.onclick = () => {
+//         userNavigationContainer.classList.toggle('active')
+//         if (userNavigationContainer.classList.contains('active')) {
+//             activeNavigationBtn.innerHTML = 'بستن منوی کاربری'
+//         } else {
+//             activeNavigationBtn.innerHTML = 'نمایش منوی کاربری'
+//         }
+//     }
+// })
 
 const showMessage = (message, type) => {
     if (type === 'success') {

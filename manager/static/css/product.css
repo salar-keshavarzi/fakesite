@@ -1,7 +1,7 @@
 .product-page-container {
     display: flex;
     flex-direction: column;
-    padding: 2rem;
+    padding: 3rem 2rem 2rem 2rem;
     /* min-height: 100%;
     min-width: 100%; */
 }
@@ -10,9 +10,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 5rem 1rem 4rem 1rem;
     gap: 1.5rem;
-    /* justify-content: space-between; */
 }
 
 .product-page-container .pruduct-gallery-container {
@@ -111,9 +109,10 @@
 
 .product-page-container .product-detail-container .product-title {
     line-height: 2.8rem;
-    font-size: 2rem;
+    font-size: 2.4rem;
     font-weight: normal;
     color: #3e3e3e;
+    font-family: vazir-medium;
 }
 
 .product-page-container .product-detail {
@@ -206,7 +205,7 @@
     flex-direction: column;
     gap: 1rem;
     font-size: 1.3rem;
-    background-color: #ff005d1b;
+    background-color: #ffe4ee;
     border-radius: 1rem;
     padding: 1rem;
     width: 16rem;
@@ -240,7 +239,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 0.1rem solid #ff005d64;
+    border: 0.1rem solid #dcdcdc;
     padding: 2rem;
     height: fit-content;
 }
@@ -249,14 +248,46 @@
     /* background-color: #ffffff; */
     width: 100%;
     border-radius: 50%;
-    padding: 0 5rem;
+    /*padding: 0 5rem;*/
 }
 
-.product-page-container .banner-container img {
+.product-page-container .banner-container svg {
     width: 100%;
     aspect-ratio: 1/1;
+    height: 26rem;
+    background-color: #f8f8f8;
+    border-radius: 1rem;
 }
 
+.product-page-container .currency-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.product-page-container .currency-wrapper .available-status {
+    width: fit-content;
+    font-size: 1.8rem;
+    height: 100%;
+    align-self: flex-end;
+    padding: 2.4rem 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.product-page-container .currency-wrapper .available-status span {
+    color: #525252;
+    font-family: vazir-medium;
+}
+
+.product-page-container .currency-wrapper .available-status svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
 
 .product-page-container .currency-container {
     display: flex;
@@ -280,6 +311,7 @@
     padding: 0.6rem 1rem;
     border-radius: 2rem;
     font-size: 1.4rem;
+    font-family: vazir-medium;
 }
 
 .product-page-container .currency-container del {

@@ -15,11 +15,15 @@
 <body id="body">
 <div class="main-container">
     {% include 'base/header.html' %}
+    <div class="site-map">
+        {% block map %}{% endblock %}
+    </div>
     <main class="main">
         {% block content %}{% endblock %}
     </main>
 </div>
 {% include 'base/footer.html' %}
 {% block pageBottom %}{% endblock %}
+{% include 'base/mobile_nav.html' %}
 </body>
 </html>

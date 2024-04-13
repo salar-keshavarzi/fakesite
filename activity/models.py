@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Count
+
 from lib.base_model import BaseModel
 from account.models import UserModel
 from product.models import Product
@@ -24,6 +26,11 @@ class Comment(BaseModel):
 
     def __str__(self):
         return f"{str(self.user)}-{str(self.product)}"
+
+    @classmethod
+    def get_by_product(cls, product=None):
+        return cls.objects.filter(product=product).select_related('user').prefetch_related('replies', 'replies__user').annotate(
+            replies_count=Count('replies')).order_by('-created_time').all()
 
     class Meta:
         verbose_name = _('comment')

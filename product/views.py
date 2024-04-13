@@ -2,11 +2,13 @@ from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import ExpressionWrapper, F, IntegerField
+from django.db.models import ExpressionWrapper, F, IntegerField, QuerySet
 from django.http import QueryDict, Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from rest_framework.generics import ListAPIView
+
+from activity.models import Comment
 from product.serializers import ProductSerializer
 from product.models import Product, Brand, Category, ProductImage, Inventory
 from django.views.generic import View, ListView
@@ -53,7 +55,6 @@ class ProductListView(ListView):
         if form.is_valid():
             categories = form.cleaned_data.get('category', None)
             brands = form.cleaned_data.get('brand', None)
-            print(categories, brands)
             if categories:
                 qs = qs.filter(category__in=categories)
             if brands:
@@ -85,12 +86,10 @@ class ProductListView(ListView):
         temp = list()
         query_params = self.request.GET.copy().lists()
         for key, values in query_params:
-            print(key, values)
             if key != 'page':
                 for value in values:
                     temp.append(f"{key}={value}")
         pagination_query_string = '&'.join(temp)
-        print(pagination_query_string)
         context[self.context_object_name] = objects
         context['pagination_query_string'] = pagination_query_string
         return context
@@ -98,10 +97,16 @@ class ProductListView(ListView):
 
 class ProductPageView(View):
     def get(self, request, product_id):
-        try:
-            product = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return Http404
+        product = Product.objects.filter(id=product_id).annotate(
+            discount_percent=ExpressionWrapper(100 * F('discount') / F('first_price'),
+                                               output_field=IntegerField())).first()
+        if not product:
+            raise Http404
+        product.visit_count += 1
+        product.save()
         images = ProductImage.objects.filter(product=product)
-        inventories = Inventory.objects.filter(product=product)
-        return render(request, template_name='product/product.html', context={'product': product, 'product_images':images, 'inventories':inventories})
+        inventories = Inventory.objects.filter(product=product, quantity__gt=0).select_related('color').all()
+        comments = Comment.get_by_product(product=product)
+        return render(request, template_name='product/product.html',
+                      context={'product': product, 'product_images': images, 'inventories': inventories,
+                               'comments': comments})

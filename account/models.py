@@ -61,6 +61,12 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+    def get_full_name(self):
+        full_name = f"{self.first_name if self.first_name else ''} {self.last_name if self.last_name else ''}"
+        if len(full_name) > 2:
+            return full_name
+        return 'کاربر روژی شاپ'
+
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")

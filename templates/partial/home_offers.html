@@ -15,14 +15,14 @@
 </div>
 <div class="offer-container">
     {% for product in products %}
-        <a href="#" class="item">
+        <a href="{% url 'product' product.id %}" class="item">
             <div class="image-container">
                 <img src="{{ product.get_image.url }}" alt="">
             </div>
             <div class="item-detail">
                 <div class="title">{{ product.title }}</div>
                 <div class="currency">
-                    {% if product.get_final_price %}
+                    {% if product.is_available %}
                         {% if product.discount_percent %}
                             <del class="price-element">{{ product.first_price }}</del>
                         {% endif %}
@@ -38,7 +38,7 @@
                     {% endif %}
                 </div>
             </div>
-            {% if product.get_final_price and product.discount_percent %}
+            {% if product.is_available and product.discount_percent %}
                 <span class="discount">{{ product.discount_percent }}</span>
             {% endif %}
         </a>

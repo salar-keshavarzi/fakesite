@@ -575,7 +575,7 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
                     </svg>
                 </a>
             </li>
-            <li><a href="">محصولات</a></li>
+            <li><a href="{% url 'product_list' %}">محصولات</a></li>
             <li><a href="#">همکاری با ما</a></li>
             <li><a href="#">درباره ما</a></li>
         </ul>
@@ -596,8 +596,8 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
         </svg>
     </form>
     {% if request.user.is_authenticated %}
-        <div class="user-dropdown-container" onclick="handleUserContainerDropdown()">
-            <button class="user-container">
+        <div class="user-dropdown-container">
+            <button class="user-container" onclick="handleUserContainerDropdown()" >
                 <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#2a353d" stroke-width="1.1">
                         <path
@@ -665,7 +665,7 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
             </div>
         </div>
         <script>
-            const userDropdownContent = document.querySelector('.header .user-dropdown-container .dropdown-content')
+            const userDropdownContent = document.querySelector('.header .user-dropdown-container')
             userDropdownContent.addEventListener('mouseleave', () => {
                 const UserDropdownContainer = document.querySelector('.header .user-dropdown-container')
                 UserDropdownContainer.classList.remove('active')
@@ -703,6 +703,20 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
                 <circle cx="17.5" cy="20.5" r="1.5"/>
             </g>
         </svg>
-        <span class="count">11</span>
+        {% if request.COOKIES.basket_quantities %}
+            <span class="count">{{ request.COOKIES.basket_quantities }}</span>
+        {% endif %}
     </a>
 </header>
+<script>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    const basket_id = getCookie('basket_id')
+    const basket_quantities = getCookie('basket_quantities')
+    console.log(basket_id)
+    console.log(basket_quantities)
+</script>

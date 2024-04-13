@@ -1,6 +1,6 @@
 import os.path
 from pathlib import Path
-from clothingStore.local_settings import SECRET_KEY
+from clothingStore.local_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'clothingStore.middleware.BasketMiddleware',
 ]
 ROOT_URLCONF = 'clothingStore.urls'
 
@@ -75,10 +76,20 @@ WSGI_APPLICATION = 'clothingStore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'USER': DB_USER,
+        'PORT': DB_PORT
     }
 }
 AUTH_USER_MODEL = 'account.UserModel'

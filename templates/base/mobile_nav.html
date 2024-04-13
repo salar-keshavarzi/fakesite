@@ -1,0 +1,49 @@
+<div class="mobile-nav-container">
+    {% if request.user.is_authenticated %}
+        <a class="user-container" href="#">
+            <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="#2a353d" stroke-width="1.1">
+                    <path
+                            d="m6.57757 15.4816c-1.41477.8424-5.12421 2.5625-2.86491 4.715 1.10365 1.0514 2.33283 1.8034 3.87821 1.8034h8.81823c1.5454 0 2.7746-.752 3.8782-1.8034 2.2593-2.1525-1.4501-3.8726-2.8649-4.715-3.3176-1.9755-7.52721-1.9755-10.84483 0z"
+                            stroke-linecap="round" stroke-linejoin="round"/>
+                    <path
+                            d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/>
+                </g>
+            </svg>
+            <span>حساب کاربری</span>
+        </a>
+    {% else %}
+        <a href="#" class="login-container">
+            <svg class="login-svg" fill="none" height="24" viewBox="0 0 24 24" width="24"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path
+                        d="m11 16-4-4m0 0 4-4m-4 4h14m-5 4v1c0 1.6569-1.3431 3-3 3h-7c-1.65685 0-3-1.3431-3-3v-10c0-1.65685 1.34315-3 3-3h7c1.6569 0 3 1.34315 3 3v1"
+                        stroke="#1e1e1e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+            </svg>
+            <span>ورود | ثبت نام</span>
+        </a>
+    {% endif %}
+    <a href="#" class="basket">
+        <div class="basket-wrapper">
+            <svg style="transform: rotate(180deg); -webkit-transform: scaleX(-1); transform: scaleX(-1);"
+                 fill="none" height="28" viewBox="0 0 24 24" width="28" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="#2a353d" stroke-width="1.1">
+                    <g stroke-linecap="round">
+                        <path
+                                d="m8 16h7.2632c4.4876 0 5.1701-2.8192 5.9978-6.93092.2388-1.18597.3582-1.77895.0711-2.17401-.2871-.39507-.8374-.39507-1.938-.39507h-13.3941"/>
+                        <path d="m8 16-2.62127-12.48507c-.22258-.89034-1.02255-1.51493-1.94028-1.51493h-.93845"/>
+                        <path
+                                d="m8.88 16h-.41143c-1.36335 0-2.46857 1.1513-2.46857 2.5714 0 .2367.1842.4286.41143.4286h11.08857"
+                                stroke-linejoin="round"/>
+                    </g>
+                    <circle cx="10.5" cy="20.5" r="1.5"/>
+                    <circle cx="17.5" cy="20.5" r="1.5"/>
+                </g>
+            </svg>
+            {% if request.COOKIES.basket_quantities %}
+                <span class="count">{{ request.COOKIES.basket_quantities }}</span>
+            {% endif %}
+        </div>
+        <span>سبد خرید</span>
+    </a>
+</div>

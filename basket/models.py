@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum
+from django.db.models.functions import Coalesce
 
 # from django.db.models.aggregates import
 from lib.base_model import BaseModel
@@ -37,7 +38,8 @@ class Basket(BaseModel):
         return BasketLine.objects.filter(basket=self)
 
     def get_total_quantity(self):
-        return BasketLine.objects.filter(basket=self).aggregate(total_quantity=Sum('quantity')).get('total_quantity', 0)
+        return BasketLine.objects.filter(basket=self).aggregate(total_quantity=Coalesce(Sum('quantity'), 0)).get(
+            'total_quantity', 0)
 
     def __str__(self):
         return f"{self.id}-basket"

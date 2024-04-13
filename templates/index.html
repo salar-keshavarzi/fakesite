@@ -55,13 +55,13 @@
         {% include 'partial/home_recent_products.html' %}
     </section>
     <section class="home-offer-section">
-    {% include 'partial/home_offers.html' %}
+        {% include 'partial/home_offers.html' %}
     </section>
     <div class="show-all-link">
-        <a href="https:/www.google.com">مشاهده تمام محصولات</a>
+        <a href="{% url 'product_list' %}">مشاهده تمام محصولات</a>
     </div>
     <section class="collection">
-    {% include 'partial/home_collections.html' %}
+        {% include 'partial/home_collections.html' %}
     </section>
 {% endblock %}
 {% block pageBottom %}
@@ -120,7 +120,9 @@
                 const stories = response.stories
                 stories.forEach(story => {
                     const storyElement = document.createElement('a')
-                    storyElement.setAttribute('href', '#')
+                    if (story?.product_id) {
+                        storyElement.setAttribute('href', window.location.origin + '/product/' + story.product_id + '/')
+                    }else storyElement.setAttribute('href', '#')
                     storyElement.setAttribute('class', 'splide__slide item')
                     storyElement.setAttribute('data-splide-interval', '5000')
                     const storyImage = document.createElement('img')

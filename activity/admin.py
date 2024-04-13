@@ -8,7 +8,7 @@ from lib.base_model import CustomModelAdmin
 class MessageReplyInline(admin.TabularInline):
     model = Reply
     extra = 1
-    readonly_fields = ('user', 'is_active')
+    readonly_fields = ('is_active', )
 
 
 @register(Like)
