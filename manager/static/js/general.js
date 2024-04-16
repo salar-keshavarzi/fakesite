@@ -106,13 +106,25 @@ const getReq = async (uri, type = 1) => {
         throw err;
     })
 }
-const postReq = async (uri, data=null, type=1) => {
+const postReq = async (uri, data = null, csrf = null, type = 1) => {
     let url = uri
     if (type !== 1) {
         url = baseUrl + uri
     }
-    return await fetch(url, {method:"POST", body:JSON.stringify(data)}).then(response => {
-        return response.json();
+    return await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrf
+        },
+    }).then(response => {
+        if (response.status === 429) {
+            const retryAfter = response.headers.get('Retry-After');
+            console.log(retryAfter)
+            return {statusCode: response.status, data: {'retryAfter': retryAfter}};
+        }
+        return response.json().then(data => ({statusCode: response.status, data: data}));
     }).catch(err => {
         console.error(err);
         throw err;
@@ -162,41 +174,160 @@ document.addEventListener('DOMContentLoaded', () => {
 //     }
 // })
 
-const showMessage = (message, type) => {
+
+const showMessage = (title, message, type) => {
     if (type === 'success') {
-        Toastify({
+        VanillaToasts.create({
+            title: title,
             text: message,
-            duration: 3000,
-            position: 'center',
-            className: 'notify',
-            style: {
-                background: '#ebf7ff',
-                color: '#3498db',
-                border: '0.2rem solid #3498db'
-            }
-        }).showToast();
+            type: 'success',
+            icon: null,
+            timeout: 4000
+        });
     } else if (type === 'error') {
-        Toastify({
+        VanillaToasts.create({
+            title: title,
             text: message,
-            duration: 3000,
-            position: 'center',
-            className: 'notify',
-            style: {
-                background: '#ff005c',
-                color: '#fff',
-            }
-        }).showToast();
+            type: 'error',
+            icon: null,
+            timeout: 4000
+        });
     } else {
-        Toastify({
+        VanillaToasts.create({
+            title: title,
             text: message,
-            duration: 3000,
-            position: 'center',
-            className: 'notify',
-            style: {
-                background: '#f6f6f6',
-                color: '#5e5e5e',
-                border: '0.2rem solid #5e5e5e'
-            }
-        }).showToast();
+            type: 'info',
+            icon: null,
+            timeout: 4000
+        });
     }
 }
+
+// (function (root, factory) {
+//     try {
+//         if (typeof exports === 'object') {
+//             module.exports = factory();
+//         } else {
+//             root.VanillaToasts = factory();
+//         }
+//     } catch (error) {
+//         console.log('Isomorphic compatibility is not supported at this time for VanillaToasts.')
+//     }
+// })(this, function () {
+//     if (document.readyState === 'complete') {
+//         init();
+//     } else {
+//         window.addEventListener('DOMContentLoaded', init);
+//     }
+//     VanillaToasts = {
+//         create: function () {
+//             console.error([
+//                 'DOM has not finished loading.',
+//                 '\tInvoke create method when DOM\s readyState is complete'
+//             ].join('\n'))
+//         },
+//         setTimeout: function () {
+//             console.error([
+//                 'DOM has not finished loading.',
+//                 '\tInvoke create method when DOM\s readyState is complete'
+//             ].join('\n'))
+//         },
+//         toasts: {}
+//     };
+//     var autoincrement = 0;
+//     function init() {
+//         var container = document.createElement('div');
+//         container.id = 'vanillatoasts-container';
+//         document.body.appendChild(container);
+//         VanillaToasts.create = function (options) {
+//             var toast = document.createElement('div');
+//             toast.id = ++autoincrement;
+//             toast.id = 'toast-' + toast.id;
+//             toast.className = 'vanillatoasts-toast';
+//             if (options.title) {
+//                 var h4 = document.createElement('h4');
+//                 h4.className = 'vanillatoasts-title';
+//                 h4.innerHTML = options.title;
+//                 toast.appendChild(h4);
+//             }
+//             if (options.text) {
+//                 var p = document.createElement('p');
+//                 p.className = 'vanillatoasts-text';
+//                 p.innerHTML = options.text;
+//                 toast.appendChild(p);
+//             }
+//             if (options.icon) {
+//                 var img = document.createElement('img');
+//                 img.src = options.icon;
+//                 img.className = 'vanillatoasts-icon';
+//                 toast.appendChild(img);
+//             }
+//             if (options.onHide) {
+//                 // do something
+//             }
+//             var position = options.positionClass
+//             switch (position) {
+//                 case 'topLeft':
+//                     container.classList.add('toasts-top-left');
+//                     break;
+//                 case 'bottomLeft':
+//                     container.classList.add('toasts-bottom-left');
+//                     break;
+//                 case 'bottomRight':
+//                     container.classList.add('toasts-bottom-right');
+//                     break;
+//                 case 'topRight':
+//                     container.classList.add('toasts-top-right');
+//                     break;
+//                 case 'topCenter':
+//                     container.classList.add('toasts-top-center');
+//                     break;
+//                 case 'bottomCenter':
+//                     container.classList.add('toasts-bottom-center');
+//                     break;
+//                 default:
+//                     container.classList.add('toasts-top-right');
+//                     break;
+//             }
+//             if (typeof options.callback === 'function') {
+//                 toast.addEventListener('click', options.callback);
+//             }
+//             toast.hide = function () {
+//                 toast.className += ' vanillatoasts-fadeOut';
+//                 toast.addEventListener('animationend', removeToast, false);
+//
+//                 if (options.onHide) {
+//                     options.onHide();
+//                 }
+//             }
+//             if (options.single === true) {
+//                 var elements = document.getElementsByClassName('vanillatoasts-toast');
+//                 while (elements.length > 0) {
+//                     elements[0].parentNode.removeChild(elements[0]);
+//                 }
+//             }
+//             if (options.timeout) {
+//                 setTimeout(toast.hide, options.timeout);
+//             }
+//             if (options.type) {
+//                 toast.className += ' vanillatoasts-' + options.type;
+//             }
+//             toast.addEventListener('click', toast.hide);
+//             function removeToast() {
+//                 document.getElementById('vanillatoasts-container').removeChild(toast);
+//                 delete VanillaToasts.toasts[toast.id];  //remove toast from object
+//             }
+//             document.getElementById('vanillatoasts-container').appendChild(toast);
+//             VanillaToasts.toasts[toast.id] = toast;
+//             return toast;
+//         }
+//         VanillaToasts.setTimeout = function (toastid, val) {
+//             if (VanillaToasts.toasts[toastid]) {
+//                 setTimeout(VanillaToasts.toasts[toastid].hide, val);
+//             }
+//         }
+//     }
+//
+//     return VanillaToasts;
+//
+// });

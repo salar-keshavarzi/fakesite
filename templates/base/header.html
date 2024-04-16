@@ -650,7 +650,7 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
                     </svg>
                     <span>علاقه مندی ها</span>
                 </a>
-                <a class="item" href="#">
+                <a class="item" href="{% url 'logout' %}">
                     <svg height="512" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
                         <g fill="none" stroke="#ff0033" stroke-linecap="round" stroke-linejoin="round"
                            stroke-width="32">
@@ -677,7 +677,7 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
             }
         </script>
     {% else %}
-        <a href="#" class="login-container">
+        <a href="{% url 'login' %}" class="login-container">
             <span>ورود | ثبت نام</span>
             <svg class="login-svg" fill="none" height="24" viewBox="0 0 24 24" width="24"
                  xmlns="http://www.w3.org/2000/svg">
@@ -703,8 +703,8 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
                 <circle cx="17.5" cy="20.5" r="1.5"/>
             </g>
         </svg>
-        {% if request.COOKIES.basket_quantities %}
-            <span class="count">{{ request.COOKIES.basket_quantities }}</span>
+        {% if request.COOKIES.basket_quantities|default:0|add:0 > 0 %}
+            <span class="count">{{ request.COOKIES.basket_quantities|default:0 }}</span>
         {% endif %}
     </a>
 </header>

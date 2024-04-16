@@ -9,7 +9,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -31,16 +30,12 @@ INSTALLED_APPS = [
     'manager',
     'order'
 ]
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#         'rest_framework.authentication.SessionAuthentication'
-#     ) if DEBUG else (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#     ),
-#     # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-# }
+REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': (
+    #     'rest_framework.authentication.SessionAuthentication'
+    # ),
+    # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,8 +133,10 @@ SESSION_COOKIE_AGE = 3600 * 24 * 30
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CORS_ORIGIN_ALLOW_ALL = True
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#     }
+# }
+LOGIN_URL = "login"
+handler404 = 'product.ProductListView'

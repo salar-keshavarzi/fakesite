@@ -13,7 +13,7 @@
             <span>حساب کاربری</span>
         </a>
     {% else %}
-        <a href="#" class="login-container">
+        <a href="{% url 'login' %}" class="login-container">
             <svg class="login-svg" fill="none" height="24" viewBox="0 0 24 24" width="24"
                  xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -40,8 +40,8 @@
                     <circle cx="17.5" cy="20.5" r="1.5"/>
                 </g>
             </svg>
-            {% if request.COOKIES.basket_quantities %}
-                <span class="count">{{ request.COOKIES.basket_quantities }}</span>
+            {% if request.COOKIES.basket_quantities|default:0|add:0 > 0 %}
+                <span class="count">{{ request.COOKIES.basket_quantities|default:0 }}</span>
             {% endif %}
         </div>
         <span>سبد خرید</span>

@@ -1,0 +1,71 @@
+<div class="login-form step2">
+    <label>لطفا کد ارسال شده به موبایلتان را در این قسمت وارد کنید</label>
+    <div class="code-input-container">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+        <input type="tel" class="code-input" placeholder="" maxlength="1"
+               onkeyup="moveToNext(this, event)">
+    </div>
+    <div class="options">
+        <div class="resend-container">
+            <button onclick="sendOTP()" type="button" class="resend-btn disabled">ارسال مجدد</button>
+            <span class="timer"></span>
+        </div>
+        <button class="change-phone-number" type="button" onclick="switchStep('1')">ویرایش شماره موبایل</button>
+    </div>
+    <form action="" method="post" onsubmit="handleSubmit(event)">
+        {% csrf_token %}
+        <input type="hidden" name="phone-number-hidden">
+        <input type="hidden" name="otp-hidden">
+        <button class="submit" type="submit">ورود</button>
+    </form>
+</div>
+<script>
+    const codeInputs = document.querySelectorAll('.code-input');
+    codeInputs.forEach(input => {
+        input.onkeydown = (e) => {
+            if (isNaN(e.key) && e.key !== 'Backspace') {
+                e.preventDefault();
+            }
+        }
+        input.addEventListener('focus', (e) => {
+            input.setSelectionRange(1, 1)
+        })
+    })
+
+    function moveToNext(input, event) {
+        const maxLength = input.getAttribute('maxlength')
+        const inputValue = input.value
+        console.log(inputValue.length);
+        if (inputValue.length === 0 && event.key === 'Backspace') {
+            const prevInput = input.previousElementSibling
+            if (prevInput) {
+                prevInput.focus()
+            }
+        } else if (inputValue.length >= maxLength && event.key !== 'Backspace') {
+            const nextInput = input.nextElementSibling
+            if (nextInput) {
+                nextInput.focus()
+            }
+        }
+        if (event.key === 'ArrowRight') {
+            const nextInput = input.nextElementSibling
+            if (nextInput) {
+                nextInput.focus()
+            }
+        } else if (event.key === 'ArrowLeft') {
+            const prevInput = input.previousElementSibling
+            if (prevInput) {
+                prevInput.focus()
+            }
+        }
+    }
+</script>

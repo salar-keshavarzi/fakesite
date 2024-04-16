@@ -48,15 +48,13 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     registered_time = jDateTimeField(auto_now_add=True, verbose_name=_('registered time'))
     last_login = jDateTimeField(blank=True, null=True, verbose_name=_('last login'))
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name=_('date joined'))
-
+    last_otp = models.PositiveBigIntegerField(null=True, blank=True, editable=False, verbose_name=_('last otp'))
     default_manager = UserManager()
     objects = CustomUserManager()
     # objects = UserManager()
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    # username_validator = CustomUsernameValidator()
 
     def __str__(self):
         return self.username
@@ -112,3 +110,14 @@ class BlockUser(BaseModel):
     class Meta:
         verbose_name = _('blocked user')
         verbose_name_plural = _('blocked users')
+
+
+class LoginCode(BaseModel):
+    phone_number = models.CharField(max_length=11, null=True, verbose_name=_('phone number'))
+
+    def __str__(self):
+        return self.phone_number
+
+    class Meta:
+        verbose_name = _('login code')
+        verbose_name_plural = _('login codes')

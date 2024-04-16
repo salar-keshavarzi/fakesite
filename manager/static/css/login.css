@@ -1,0 +1,165 @@
+.login-form-container {
+    margin: 10rem auto;
+    background-color: #fff;
+    border: 0.1rem solid #ededed;
+    border-radius: 0.5rem;
+    display: flex;
+    gap: 5rem;
+    flex-direction: column;
+    width: 40rem;
+    justify-content: center;
+    padding: 1rem 3rem 2rem 3rem;
+    box-shadow: 0 1rem 4rem #0000000f;
+    position: relative;
+}
+
+.login-form-container .loader {
+    display: none;
+}
+
+.login-form-container .title {
+    font-size: 1.8rem;
+    font-weight: normal;
+    font-family: vazir-medium;
+    color: #45537f;
+}
+
+.login-form {
+    display: none;
+    gap: 1.5rem;
+    flex-direction: column;
+    width: 100%;
+}
+
+.login-form.active {
+    display: flex !important;
+}
+
+.login-form label {
+    font-size: 1.4rem;
+    color: #45537f;
+}
+
+.login-form .number-input {
+    width: 100%;
+    padding: 1rem;
+    border: 0.1rem solid #dedede;
+    outline: none;
+    border-radius: 0.5rem;
+    direction: ltr;
+    font-size: 1.8rem;
+    color: #5e5e5e;
+    letter-spacing: 0.1rem;
+}
+
+.login-form .number-input:focus {
+    border: 0.1rem solid #3498db;
+}
+
+.login-form .input-alert {
+    color: #ff005c;
+    font-size: 1.3rem;
+    width: 100%;
+    display: none;
+}
+
+.login-form .description {
+    font-size: 1.2rem;
+    color: #5e5e5e;
+}
+
+.login-form .options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.login-form .resend-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    font-size: 1.4rem;
+}
+
+.login-form .resend-container .resend-btn {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: #45537f;
+    font-size: 1.4rem;
+}
+
+.login-form .resend-container .resend-btn.disabled {
+    cursor: default;
+    color: #838eb0;
+}
+
+.login-form .resend-container .timer {
+    color: #45537f;
+}
+
+.login-form .resend-container .resend-btn.disabled ~ .timer {
+    color: #838eb0;
+}
+
+.login-form .options .change-phone-number {
+    outline: none;
+    border: none;
+    font-size: 1.3rem;
+    color: #45537f;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.login-form button.submit {
+    width: 100%;
+    border: none;
+    background-color: #ff005c;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 1.2rem 3rem;
+    cursor: pointer;
+    margin: 2rem auto 0;
+    font-size: 1.6rem;
+    font-family: vazir-medium;
+}
+
+.login-form button.submit:hover {
+    background-color: #ed0057;
+}
+
+.login-form .code-input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    direction: ltr !important;
+}
+
+.login-form .code-input-container .code-input {
+    width: 4rem;
+    text-align: center;
+    border: 0.1rem solid #dedede;
+    background-color: #f8f8f8;
+    border-radius: 1rem;
+    font-size: 1.8rem;
+    padding: 1.5rem 0.5rem;
+    color: transparent;
+    text-shadow: 0 0 0 #5e5e5e;
+    cursor: pointer;
+    outline: none;
+}
+
+.login-form .code-input-container .code-input:focus {
+    outline: 0.2rem solid #3498db;
+}
+
+@media only screen and (max-width: 500px) {
+    .login-form-container {
+        width: 100%;
+        box-shadow: none;
+        border: none;
+    }
+}

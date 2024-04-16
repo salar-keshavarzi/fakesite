@@ -466,6 +466,16 @@
     border: none;
     cursor: pointer;
 }
+.product-page-container .add-comment-container .redirect-link{
+    padding: 1rem;
+    align-self: flex-end;
+    background-color: #ff005c;
+    color: #fff;
+    border-radius: 1rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
 
 .product-page-container .comment {
     display: flex;
@@ -482,16 +492,22 @@
 .product-page-container .comment-header {
     display: flex;
     flex-direction: row;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.5rem;
     padding: 1rem;
     /* border-radius: 0.5rem; */
     /* width: fit-content; */
     border-bottom: 0.2rem solid #dddddd;
 }
-
+.product-page-container .comment-header svg{
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+}
 .product-page-container .comment-header .date, .reply-header .date {
     color: #8c8c8c;
     font-size: 1.2rem;
+    margin-right: 1rem;
 }
 
 .product-page-container .comment-body {
@@ -501,6 +517,7 @@
     padding: 1.5rem;
     border-radius: 0 0 1rem 1rem;
     gap: 2rem;
+    min-height: 8rem;
 }
 
 .product-page-container .comment-body .content, .reply-body {
@@ -573,7 +590,7 @@
 
 
 .product-page-container .add-reply-container {
-    padding: 2rem 3rem 1rem 2rem;
+    padding: 0 3rem 1rem 2rem;
     width: 100%;
 }
 
@@ -590,6 +607,7 @@
     height: 5rem;
     border: none;
     border-bottom: 0.1rem solid #d2d2d2;
+    overflow: hidden;
     resize: none !important;
     padding: 1rem;
     color: #565656;
@@ -602,6 +620,7 @@
     background-color: #ffffff;
     height: 8rem;
     border: 0.1rem solid #d2d2d2;
+    overflow: auto;
 }
 
 .product-page-container .add-reply-container form button {

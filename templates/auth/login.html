@@ -1,0 +1,146 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="login-form-container">
+        <h1 class="title">ورود | ثبت نام</h1>
+        {% include 'partial/login_form.html' %}
+        {% include 'partial/confirm_login_from.html' %}
+        <div class="loader"></div>
+    </div>
+{% endblock %}
+{% block pageBottom %}
+    <script>
+        const step = '{{ step|default:1 }}'
+        const remaining_time = parseInt('{{ remaining_time|default:0 }}')
+        console.log(remaining_time)
+        let last_timer = null
+        console.log(step)
+        if (remaining_time) {
+            startTimer(remaining_time)
+        }
+
+        function getTimeFromSeconds(durationInSeconds) {
+            const days = Math.floor(durationInSeconds / (60 * 60 * 24));
+            const hours = Math.floor((durationInSeconds % (60 * 60 * 24)) / (60 * 60));
+            const minutes = Math.floor((durationInSeconds % (60 * 60)) / 60);
+            const seconds = durationInSeconds % 60;
+            return {
+                days: days,
+                hours: hours,
+                minutes: minutes,
+                seconds: seconds
+            };
+        }
+
+        function switchStep(step = '1') {
+            const step1 = document.querySelector('.login-form.step1')
+            const step2 = document.querySelector('.login-form.step2')
+            if (step === '1') {
+                if (!step1.classList.contains('active')) {
+                    step1.classList.add('active')
+                }
+                step2.classList.remove('active')
+            } else {
+                if (!step2.classList.contains('active')) {
+                    step2.classList.add('active')
+                }
+                step1.classList.remove('active')
+            }
+        }
+
+        switchStep(step)
+        if (step === '2') {
+            codeInputs[0].focus()
+        }
+
+        function handleInputAlert(type = 'show') {
+            const inputAlert = document.querySelector('.login-form .input-alert')
+            if (type === 'show') {
+                inputAlert.style.display = 'block'
+            } else {
+                inputAlert.style.display = 'none'
+            }
+        }
+
+        function sendOTP() {
+            const phoneNumber = input.value;
+            const regex = /^09\d{9}$/;
+            if (!regex.test(phoneNumber)) {
+                switchStep('1')
+                handleInputAlert('show')
+            } else {
+                handleInputAlert('hide')
+                const phone_number = document.querySelector('.login-form input[name=phone_number]')
+                const loader = document.querySelector('.login-form-container .loader')
+                loader.style.display = 'block'
+                postReq('{% url 'login-api' %}', data = {phone_number: phone_number.value})
+                    .then(({statusCode, data}) => {
+                        console.log(data)
+                        if (statusCode === 429) {
+                            const {days, hours, minutes, seconds} = getTimeFromSeconds(parseInt(data.retryAfter))
+                            const timeString = days + ' روز ' + hours + ' ساعت ' + minutes + ' دقیقه ' + seconds + ' ثانیه '
+                            showMessage('حداکثر درخواست مجاز', 'لطفا بعدا تلاش کنید. ' + timeString, 'error')
+                        }
+                        if (statusCode === 201) {
+                            showMessage(null, 'کد با موفقیت ارسال شد', 'success')
+                            switchStep('2')
+                            codeInputs[0].focus()
+                            if (last_timer) {
+                                clearInterval(last_timer)
+                            }
+                            startTimer(120)
+                            const resendBtn = document.querySelector('.login-form .resend-btn')
+                            if (!resendBtn.classList.contains('disabled')) {
+                                resendBtn.classList.add('disabled')
+                            }
+                            console.log('code sent')
+                        } else {
+                            showMessage(null, 'عملیات ناموفق', 'error')
+                        }
+                    }).catch(err => {
+                    showMessage(null, 'عملیات ناموفق', 'error')
+                }).finally(() => {
+                    loader.style.display = 'none'
+                })
+            }
+        }
+
+        function handleSubmit(e) {
+            const phoneNumber = document.querySelector('input[name=phone-number-hidden]')
+            const phoneNumberInput = document.querySelector('input[name=phone_number]')
+            phoneNumber.value = phoneNumberInput.value
+            const otp = document.querySelector('input[name=otp-hidden]')
+            let otpInput = ''
+            document.querySelectorAll('.code-input').forEach(codeInput => {
+                otpInput += codeInput.value
+            })
+            if (otpInput.length === 6) {
+                otp.value = otpInput
+                return true
+            }
+            e.preventDefault()
+        }
+
+
+        function startTimer(duration = 120) {
+            const timer = document.querySelector(".login-form .timer")
+            let seconds = duration
+            const ti = setInterval(() => {
+                let min = parseInt(seconds / 60)
+                let sec = parseInt(seconds % 60)
+                timer.innerHTML = `${min}:${sec}`
+                if (min === 0 && sec === 0) {
+                    const resendBtn = document.querySelector('.login-form .resend-btn')
+                    resendBtn.classList.remove('disabled')
+                    clearInterval(ti)
+                    timer.innerHTML = ''
+                }
+                seconds -= 1
+            }, 1000);
+            last_timer = ti
+        }
+    </script>
+{% endblock %}

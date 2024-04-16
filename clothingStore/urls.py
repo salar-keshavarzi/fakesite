@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.views.generic import TemplateView
+from account.views import LoginView, LoginAPI, LogOutView
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -27,5 +28,8 @@ urlpatterns = [
                   path('basket/', include('basket.urls')),
                   path('order/', include('order.urls')),
                   path('manager/', include('manager.urls')),
+                  path('login/', LoginView.as_view(), name='login'),
+                  path('login/api/', LoginAPI.as_view(), name='login-api'),
+                  path('logout/', LogOutView.as_view(), name='logout'),
                   path('', TemplateView.as_view(template_name='index.html'), name='home'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

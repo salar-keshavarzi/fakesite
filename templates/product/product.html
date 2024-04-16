@@ -179,15 +179,30 @@
             <h6 class="legend">دیدگاه ها</h6>
             <ul class="comments-container">
                 <li class="add-comment-container">
-                    <form action="">
-                                <textarea spellcheck="false" name="" id="comment-input"
-                                          placeholder="دیدگاه خود را در مورد این محصول بنویسید ..."></textarea>
-                        <button type="submit">ثبت دیدگاه</button>
+                    <form action="{% url 'add_comment' product.id %}" method="post">
+                        {% csrf_token %}
+                        <textarea spellcheck="false" name="comment-input" id="comment-input" required maxlength="1000"
+                                  placeholder="دیدگاه خود را در مورد این محصول بنویسید ..."></textarea>
+                        {% if request.user.is_authenticated %}
+                            <button type="submit">ثبت دیدگاه</button>
+                        {% else %}
+                            <a class="redirect-link" href="{% url 'login' %}?next={% url 'product' product.id %}">برای
+                                ثبت دیدگاه ابتدا وارد
+                                شوید</a>
+                        {% endif %}
                     </form>
                 </li>
                 {% for comment in comments %}
                     <li class="comment">
                         <div class="comment-header">
+                            <svg fill="none" height="18" viewBox="0 0 24 24" width="18"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <g stroke="#141b34" stroke-width="1.5">
+                                    <path d="m6.57757 15.4816c-1.41477.8424-5.12421 2.5625-2.86491 4.715 1.10365 1.0514 2.33283 1.8034 3.87821 1.8034h8.81823c1.5454 0 2.7746-.752 3.8782-1.8034 2.2593-2.1525-1.4501-3.8726-2.8649-4.715-3.3176-1.9755-7.52721-1.9755-10.84483 0z"
+                                          stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/>
+                                </g>
+                            </svg>
                             <span class="name">{{ comment.user.get_full_name }}</span>
                             <span class="date">{{ comment.created_time|date:'Y/m/d' }}</span>
                         </div>
@@ -195,7 +210,7 @@
                             <div class="content">{{ comment.content }}</div>
                             {% if comment.replies_count %}
                                 <button class="reply-btn" onclick="toggleShowReplies(event || window.event)">
-                                    <div class="reply-number">{{ comment.replies_count }} پاسخ </div>
+                                    <div class="reply-number">{{ comment.replies_count }} پاسخ</div>
                                     <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                         <path
                                                 d="m3.707 7.99946609 2.6820873 2.68251441c.19526214.1952622.19526214.5118447 0 .7071068-.17356636.1735663-.44299076.1928515-.6378589.0578554l-.06924788-.0578554-3.56594681-3.56879591-.04963996-.07113932-.0276424-.05580958-.02277705-.06763362-.00488862-.02072182c-.00726053-.03368638-.01108568-.06889001-.01108568-.10498705l.00546187.07391777-.00366488-.03143517.00000064-.08500397.01499085-.08630944.02100376-.06220575.03939577-.07597376.05450152-.07114677 3.55029099-3.55093021c.19526214-.19526214.51184463-.19526214.70710678 0 .17356635.17356636.1928515.44299076.05785545.6378589l-.05785545.06924788-2.6820873 2.68144661 4.293.00053391c3.5217665 0 5.8853902 1.97580254 5.9959473 4.7924218l.0040527.2075782c0 .2761424-.2238576.5-.5.5s-.5-.2238576-.5-.5c0-2.27316733-1.8074702-3.90458915-4.73848287-3.99595761l-.26151713-.00404239-4.293-.00053391 2.6820873 2.68251441z"/>
@@ -220,13 +235,16 @@
                                 {% endfor %}
                             {% endif %}
                         </ul>
-                        <div class="add-reply-container">
-                            <form action="">
-                                    <textarea name="" class="add-reply-input"
+                        {% if request.user.is_authenticated %}
+                            <div class="add-reply-container">
+                                <form action="{% url 'add_reply' comment.id %}" method="post">
+                                    {% csrf_token %}
+                                    <textarea name="reply-input" class="add-reply-input" required maxlength="1000"
                                               placeholder="پاسخ خود را بنویسید .."></textarea>
-                                <button type="submit">ثبت پاسخ</button>
-                            </form>
-                        </div>
+                                    <button type="submit">ثبت پاسخ</button>
+                                </form>
+                            </div>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
@@ -234,7 +252,6 @@
     </div>
 {% endblock %}
 {% block pageBottom %}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
         const maxQuantity = 9
         const quantityInput = document.getElementById("quantity-input")
@@ -247,7 +264,7 @@
             quantityInput.addEventListener('change', (e) => {
                 if (e.target.value < 0 || e.target.value > maxQuantity) {
                     e.target.value = 1
-                    showMessage("مقدار وارد شده نامعتبر است", 'error')
+                    showMessage(null, "مقدار وارد شده نامعتبر است", 'error')
                 }
             })
             const addBtn = document.querySelector('#add')

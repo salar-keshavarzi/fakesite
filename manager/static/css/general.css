@@ -909,7 +909,7 @@ input.number {
     width: 100%;
     overflow: hidden;
     align-items: center;
-    z-index: 99999;
+    z-index: 99990;
     border-top: 0.3rem solid #dedede;
     flex-wrap: nowrap;
     padding: 1rem 0;
@@ -975,6 +975,9 @@ input.number {
     aspect-ratio: 1/1;
 }
 
+/*//////////*/
+
+/*/////////////*/
 @media only screen and (max-width: 1150px) {
     .main-container {
         width: 100%;

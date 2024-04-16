@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import register
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from account.models import UserModel, BlockUser, Address
+from account.models import UserModel, BlockUser, Address, LoginCode
 from lib.base_model import CustomModelAdmin
 
 
@@ -56,3 +56,9 @@ class BlockUserAdmin(CustomModelAdmin):
     list_display = ('id', 'phone_number', 'user', 'created_time')
     list_filter = ('is_active',)
     search_fields = ('id', 'phone_number', 'user__id')
+
+
+@register(LoginCode)
+class LoginCodeAdmin(CustomModelAdmin):
+    list_display = ('phone_number', 'created_time')
+    search_fields = ('phone_number',)
