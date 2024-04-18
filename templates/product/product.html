@@ -11,7 +11,7 @@
 {% block content %}
     <div class="product-page-container">
         <div class="product-container">
-            <div class="pruduct-gallery-container">
+            <div class="product-gallery-container">
                 <div id="main-carousel" class="splide"
                      aria-label="The carousel with thumbnails. Selecting a thumbnail will change the Beautiful Gallery carousel.">
                     <div class="splide__track">
@@ -56,13 +56,13 @@
                                     sizeItems.push(sizeElement.getAttribute('data-size'))
                                 }
                             })
-                            console.log(sizeItems)
                             sizeElements.forEach(sizeElement => {
                                 sizeElement.onclick = () => {
                                     hideColors()
                                     sizeElements.forEach(size => size.classList.remove('active'))
                                     sizeElement.classList.add('active')
                                     showColors(sizeElement.innerText)
+                                    handleBasketStatus()
                                 }
                             })
 
@@ -77,6 +77,7 @@
                             function hideColors() {
                                 document.querySelectorAll(`.colors-list .item`).forEach(colorItem => {
                                     colorItem.classList.add('hide')
+                                    colorItem.classList.remove('active')
                                 })
                             }
                         </script>
@@ -84,7 +85,8 @@
                             <span class="title">رنگ های موجود برای سایز انتخاب شده :</span>
                             <ul class="colors-list">
                                 {% for inventory in inventories %}
-                                    <li class="item hide" data-size="{{ inventory.size }}"
+                                    <li class="item hide" data-color="{{ inventory.color }}"
+                                        data-size="{{ inventory.size }}"
                                         style="background-color: {{ inventory.color.code }};"></li>
                                 {% endfor %}
                             </ul>
@@ -95,12 +97,9 @@
                                 colorElement.onclick = () => {
                                     colorElements.forEach(color => color.classList.remove('active'))
                                     colorElement.classList.add('active')
+                                    handleBasketStatus()
                                 }
                             })
-                            if (sizeElements.length > 0) {
-                                sizeElements[0].classList.add('active')
-                                showColors(sizeElements[0].innerText)
-                            }
                         </script>
                     {% endif %}
                     <p class="attribute">
@@ -118,6 +117,7 @@
                 </div>
             </div>
             <div class="order-container">
+                {% include 'partial/csrf.html' %}
                 <div class="banner-container">
                     {% include 'svgs/basket-svg.html' %}
                 </div>
@@ -162,16 +162,47 @@
                 </div>
                 {% if product.is_available %}
                     <div class="add-to-basket-container">
-                        {#                    <button id="add-to-basket-btn">افزودن به سبد خرید</button>#}
-                        <div id="config-container">
-                            <button id="add">+</button>
-                            <input id="quantity-input" type="text" value="1">
-                            <button id="remove">--</button>
+                        <button id="add-to-basket-btn">افزودن به سبد خرید</button>
+                        <div id="config-container" class="hide">
+                            <button type="button" id="add">
+                                <svg fill="none" height="20" viewBox="0 0 24 24" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                                       stroke-width="2">
+                                        <path d="m12 4v16"/>
+                                        <path d="m4 12h16"/>
+                                    </g>
+                                </svg>
+                            </button>
+                            <input id="quantity-input" type="text" value="0" readonly="readonly">
+                            <button type="button" id="minus">
+                                <svg fill="none" height="20" viewBox="0 0 24 24" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="m20 12h-16" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 {% endif %}
                 <div class="add-to-favorite-container">
-                    <button id="add-to-favorite-btn">افزودن به علاقه مندی ها &hearts;</button>
+                    {% if request.user.is_authenticated %}
+                        {% if favorite %}
+                            <button data-favorite="{{ favorite.id }}" id="add-to-favorite-btn"
+                                    class="add-to-favorite-btn is-favorite">به علاقه مندی ها افزوده شد
+                            </button>
+                        {% else %}
+                            <button data-favorite="" id="add-to-favorite-btn" class="add-to-favorite-btn">افزودن به
+                                علاقه مندی ها &hearts;
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}?next={% url 'product' product.id %}" class="add-to-favorite-btn">افزودن
+                            به علاقه مندی ها &hearts;</a>
+                    {% endif %}
+                </div>
+                <div class="loader-wrapper hide">
+                    <div class="loader"></div>
                 </div>
             </div>
         </div>
@@ -223,9 +254,10 @@
                                 {% for reply in comment.replies.all %}
                                     <li class="reply">
                                         <div class="reply-header">
-                                            <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                        d="m3.707 7.99946609 2.6820873 2.68251441c.19526214.1952622.19526214.5118447 0 .7071068-.17356636.1735663-.44299076.1928515-.6378589.0578554l-.06924788-.0578554-3.56594681-3.56879591-.04963996-.07113932-.0276424-.05580958-.02277705-.06763362-.00488862-.02072182c-.00726053-.03368638-.01108568-.06889001-.01108568-.10498705l.00546187.07391777-.00366488-.03143517.00000064-.08500397.01499085-.08630944.02100376-.06220575.03939577-.07597376.05450152-.07114677 3.55029099-3.55093021c.19526214-.19526214.51184463-.19526214.70710678 0 .17356635.17356636.1928515.44299076.05785545.6378589l-.05785545.06924788-2.6820873 2.68144661 4.293.00053391c3.5217665 0 5.8853902 1.97580254 5.9959473 4.7924218l.0040527.2075782c0 .2761424-.2238576.5-.5.5s-.5-.2238576-.5-.5c0-2.27316733-1.8074702-3.90458915-4.73848287-3.99595761l-.26151713-.00404239-4.293-.00053391 2.6820873 2.68251441z"/>
+                                            <svg fill="none" height="16" viewBox="0 0 16 16" width="16"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="m3.707 8.00501 2.68209-2.68252c.19526-.19526.19526-.51184 0-.7071-.17357-.17357-.44299-.19285-.63786-.05786l-.06925.05786-3.56595 3.56879-.04964.07114-.02764.05581-.02278.06764-.00488.02072c-.00726.03368-.01109.06889-.01109.10498l.00546-.07391-.00366.03143v.08501l.01499.08631.021.0622.0394.07597.0545.07115 3.55029 3.55097c.19526.1952.51185.1952.70711 0 .17356-.1736.19285-.443.05785-.6379l-.05785-.0692-2.68209-2.68149 4.293-.00054c3.5218 0 5.8854-1.9758 5.9959-4.79242l.0041-.20758c0-.27614-.2239-.5-.5-.5s-.5.22386-.5.5c0 2.27317-1.8075 3.90459-4.73848 3.99596l-.26152.00404-4.293.00054 2.68209-2.68252z"
+                                                      fill="#212121"/>
                                             </svg>
                                             <span class="name">{{ reply.user.get_full_name }}</span>
                                             <span class="date">{{ reply.created_time|date:'Y/m/d' }}</span>
@@ -252,45 +284,204 @@
     </div>
 {% endblock %}
 {% block pageBottom %}
+
     <script>
-        const maxQuantity = 9
-        const quantityInput = document.getElementById("quantity-input")
-        if (quantityInput) {
-            quantityInput.onkeydown = (e) => {
-                if (isNaN(e.key) && e.key !== 'Backspace') {
-                    e.preventDefault();
-                }
+        const quantityInput = document.querySelector("#quantity-input")
+        const addToBasketButton = document.querySelector("#add-to-basket-btn")
+        const configContainer = document.querySelector("#config-container")
+
+        function getCSRFToken() {
+            const csrfElement = document.querySelector('.csrf-wrapper input[name=csrfmiddlewaretoken]')
+            if (csrfElement) {
+                return csrfElement.value
             }
-            quantityInput.addEventListener('change', (e) => {
-                if (e.target.value < 0 || e.target.value > maxQuantity) {
-                    e.target.value = 1
-                    showMessage(null, "مقدار وارد شده نامعتبر است", 'error')
-                }
-            })
-            const addBtn = document.querySelector('#add')
-            addBtn.onclick = (e) => {
-                if (parseInt(quantityInput.value) < maxQuantity) {
-                    quantityInput.value = parseInt(quantityInput.value) + 1
-                }
-            }
-            const removeBtn = document.querySelector('#remove')
-            removeBtn.onclick = (e) => {
-                if (parseInt(quantityInput.value) > 1) {
-                    quantityInput.value = parseInt(quantityInput.value) - 1
+            return null
+        }
+
+
+        function handleLoader(mode = 'show') {
+            const loader = document.querySelector('.order-container .loader-wrapper')
+            if (mode === 'show') {
+                loader.classList.remove('hide')
+            } else {
+                if (!loader.classList.contains('hide')) {
+                    loader.classList.add('hide')
                 }
             }
         }
-        document.addEventListener('DOMContentLoaded', function () {
 
+        function handleBasketStatus() {
+            handleLoader('show')
+            const colorElement = document.querySelector('.colors-list .item.active')
+            const sizeElement = document.querySelector('.size-list .item.active')
+            if (colorElement && sizeElement) {
+                getReq('{% url 'retrieve_basket' request.COOKIES.basket_id %}').then(response => {
+                    const basketLines = response['basket_lines']
+                    const basketLine = basketLines.find(
+                        line => line['product_id'] === '{{ product.id }}' &&
+                            line['color'] === colorElement.getAttribute('data-color') &&
+                            line['size'] === sizeElement.innerText
+                    )
+                    console.log(basketLine)
+                    if (basketLine && basketLine?.quantity > 0) {
+                        quantityInput.value = basketLine.quantity
+                        configContainer.classList.remove('hide')
+                        if (!addToBasketButton.classList.contains('hide')) {
+                            addToBasketButton.classList.add('hide')
+                        }
+                    } else {
+                        quantityInput.value = 0
+                        addToBasketButton.classList.remove('hide')
+                        if (!configContainer.classList.contains('hide')) {
+                            configContainer.classList.add('hide')
+                        }
+                    }
+                }).finally(() => {
+                    handleLoader('hide')
+                })
+            }
+        }
+
+        if (quantityInput) {
+            const addBtn = document.querySelector('#add')
+            addBtn.onclick = (e) => {
+                addToBasket(1)
+            }
+            const removeBtn = document.querySelector('#minus')
+            removeBtn.onclick = (e) => {
+                removeFromBasket()
+            }
+            addToBasketButton.onclick = (e) => {
+                addToBasket(1, mode = 'initial')
+            }
+        }
+
+        function updateBasketQuantity(mode = 'add') {
+            document.querySelectorAll('.basket .count').forEach(basketElement => {
+                const currentQuantity = parseInt(basketElement.innerText)
+                if (mode === 'add') {
+                    basketElement.innerText = currentQuantity ? currentQuantity + 1 : 1
+                } else if (mode === 'minus') {
+                    basketElement.innerText = (currentQuantity > 1) ? currentQuantity - 1 : ''
+                } else {
+                    console.error('invalid mode for basket updating')
+                }
+            })
+
+        }
+
+
+        function addToBasket(quantity = 1, mode) {
+            const colorElement = document.querySelector('.colors-list .item.active')
+            const sizeElement = document.querySelector('.size-list .item.active')
+            if (colorElement && sizeElement) {
+                const size = sizeElement.innerText
+                const color = colorElement.getAttribute('data-color')
+                const currentQuantity = parseInt(quantityInput.value)
+                handleLoader('show')
+                postReq('{% url 'create_basket_line' %}', data = {
+                    basket_id: '{{ request.COOKIES.basket_id }}',
+                    product_id: '{{ product.id }}',
+                    size: size,
+                    color: color,
+                    quantity: currentQuantity + quantity
+                }, csrf = getCSRFToken()).then(response => {
+                    const {statusCode, data} = response
+                    if (statusCode === 201) {
+                        if (currentQuantity === data.quantity) {
+                            showMessage(null, 'حداکثر موجودی', 'error')
+                        } else {
+                            showMessage(null, 'کالا به سبد خرید افزوده شد', 'success')
+                            if (mode === 'initial') {
+                                addToBasketButton.classList.add('hide')
+                                configContainer.classList.remove('hide')
+                            }
+                            updateBasketQuantity(mode = 'add')
+                        }
+                        quantityInput.value = data.quantity
+                    } else {
+                        showMessage(null, 'خطلایی رخ داده است', 'error')
+                    }
+                }).catch(() => {
+                    showMessage(null, 'خطلایی رخ داده است', 'error')
+                }).finally(() => {
+                    handleLoader('hide')
+                })
+            } else {
+                showMessage(null, 'لطفا سایز و رنگ مورد نظر خود را انتخاب کنید', 'info')
+            }
+        }
+
+        function removeFromBasket() {
+            const colorElement = document.querySelector('.colors-list .item.active')
+            const sizeElement = document.querySelector('.size-list .item.active')
+            if (colorElement && sizeElement) {
+                handleLoader('show')
+                const size = sizeElement.innerText
+                const color = colorElement.getAttribute('data-color')
+                const currentQuantity = parseInt(quantityInput.value)
+                if (currentQuantity > 1) {
+                    postReq('{% url 'create_basket_line' %}', data = {
+                        basket_id: '{{ request.COOKIES.basket_id }}',
+                        product_id: '{{ product.id }}',
+                        size: size,
+                        color: color,
+                        quantity: currentQuantity - 1
+                    }, csrf = getCSRFToken()).then(response => {
+                        const {statusCode, data} = response
+                        if (statusCode === 201) {
+                            if (currentQuantity === data.quantity) {
+                                showMessage(null, 'حداکثر موجودی', 'error')
+                            } else {
+                                showMessage(null, 'کالا از سبد خرید حذف شد', 'info')
+                            }
+                            quantityInput.value = data.quantity
+                            updateBasketQuantity(mode = 'minus')
+                        } else {
+                            showMessage(null, 'خطلایی رخ داده است', 'error')
+                        }
+                    }).catch(() => {
+                        showMessage(null, 'خطلایی رخ داده است', 'error')
+                    }).finally(() => {
+                        handleLoader('hide')
+                    })
+                } else {
+                    getReq('{% url 'retrieve_basket' request.COOKIES.basket_id %}').then(response => {
+                        const basketLines = response['basket_lines']
+                        const basketLine = basketLines.find(
+                            line => line['product_id'] === '{{ product.id }}' &&
+                                line['color'] === colorElement.getAttribute('data-color') &&
+                                line['size'] === sizeElement.innerText
+                        )
+                        if (basketLine) {
+                            deleteReq(window.location.origin + '/basket/line/delete/' + basketLine.id + '/', csrf = getCSRFToken()).then(response => {
+                                showMessage(null, 'کالا از سبد خرید حذف شد', 'info')
+                                configContainer.classList.add('hide')
+                                addToBasketButton.classList.remove('hide')
+                                quantityInput.value = 0
+                                updateBasketQuantity(mode = 'minus')
+                            }).catch(() => {
+                                showMessage(null, 'خطلایی رخ داده است', 'error')
+                            }).finally(() => {
+                                handleLoader('hide')
+                            })
+                        }
+                    })
+                }
+            } else {
+                showMessage(null, 'لطفا سایز و رنگ مورد نظر خود را انتخاب کنید', 'info')
+            }
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
             const main = new Splide('#main-carousel', {
                 direction: 'rtl',
                 // type: 'fade',
                 rewind: true,
                 pagination: false,
                 arrows: false,
-
             });
-
             const thumbnails = new Splide('#thumbnail-carousel', {
                 direction: 'rtl',
                 fixedWidth: 60,
@@ -313,6 +504,35 @@
             main.mount();
             thumbnails.mount();
         });
+        const addToFavorite = document.querySelector('#add-to-favorite-btn')
+        addToFavorite.addEventListener('click', () => {
+            handleLoader('show')
+            if (addToFavorite.classList.contains('is-favorite')) {
+                const favID = parseInt(addToFavorite.getAttribute('data-favorite'))
+                deleteReq(`activity/{{ request.user.id }}/favorite/${favID}/delete/api/`,
+                    csrf = getCSRFToken(), type = 2).then(response => {
+                    showMessage(null, 'از علاقه مندی ها حذف شد', 'info')
+                    addToFavorite.classList.remove('is-favorite')
+                    addToFavorite.innerHTML = "افزودن به علاقه مندی ها &hearts;"
+                }).finally(() => {
+                    handleLoader('hide')
+                })
+            } else {
+                postReq(`activity/{{ request.user.id }}/favorite/create/api/`,
+                    data = {product: "{{ product.id }}"},
+                    csrf = getCSRFToken(), type = 2).then(response => {
+                    const {statusCode, data} = response
+                    if (statusCode === 201) {
+                        showMessage(null, 'به علاقه مندی ها اضاف شد', 'success')
+                        addToFavorite.setAttribute('data-favorite', data.id)
+                        addToFavorite.innerHTML = "به علاقه مندی ها افزوده شد"
+                        addToFavorite.classList.add('is-favorite')
+                    }
+                }).finally(() => {
+                    handleLoader('hide')
+                })
+            }
+        })
     </script>
     <script>
         function toggleShowReplies(e) {
@@ -320,4 +540,13 @@
             ele.classList.toggle('hide')
         }
     </script>
+    {% if product.is_available %}
+        <script>
+            if (sizeElements && sizeElements.length > 0) {
+                sizeElements[0].classList.add('active')
+                showColors(sizeElements[0].innerText)
+                handleBasketStatus()
+            }
+        </script>
+    {% endif %}
 {% endblock %}

@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import ExpressionWrapper, F, IntegerField, QuerySet
@@ -7,8 +5,7 @@ from django.http import QueryDict, Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from rest_framework.generics import ListAPIView
-
-from activity.models import Comment
+from activity.models import Comment, Like
 from product.serializers import ProductSerializer
 from product.models import Product, Brand, Category, ProductImage, Inventory
 from django.views.generic import View, ListView
@@ -107,6 +104,10 @@ class ProductPageView(View):
         images = ProductImage.objects.filter(product=product)
         inventories = Inventory.objects.filter(product=product, quantity__gt=0).select_related('color').all()
         comments = Comment.get_by_product(product=product)
+        favorite = False
+        if request.user.is_authenticated:
+            if temp := Like.objects.filter(user=request.user, product=product).first():
+                favorite = temp
         return render(request, template_name='product/product.html',
                       context={'product': product, 'product_images': images, 'inventories': inventories,
-                               'comments': comments})
+                               'comments': comments, 'favorite': favorite})

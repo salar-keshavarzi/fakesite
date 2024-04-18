@@ -597,7 +597,7 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
     </form>
     {% if request.user.is_authenticated %}
         <div class="user-dropdown-container">
-            <button class="user-container" onclick="handleUserContainerDropdown()" >
+            <button class="user-container" onclick="handleUserContainerDropdown()">
                 <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                     <g stroke="#2a353d" stroke-width="1.1">
                         <path
@@ -705,6 +705,8 @@ c18 -14 17 -15 -15 -13 -19 2 -36 9 -39 16 -5 17 30 15 54 -3z m-106 -145 c0
         </svg>
         {% if request.COOKIES.basket_quantities|default:0|add:0 > 0 %}
             <span class="count">{{ request.COOKIES.basket_quantities|default:0 }}</span>
+        {% else %}
+            <span class="count"></span>
         {% endif %}
     </a>
 </header>

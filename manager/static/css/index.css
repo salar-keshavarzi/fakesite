@@ -419,7 +419,7 @@
     color: #fff;
     gap: 0.2rem;
     padding: 0 0.2rem;
-    z-index: 100;
+    z-index: 3;
 }
 
 .home-offer-section .offer-container .item span.discount::before {
@@ -430,7 +430,7 @@
     width: 100%;
     object-fit: cover;
     aspect-ratio: 1/1;
-    z-index: 99;
+    z-index: 2;
     border-radius: 0.8rem;
 }
 
@@ -550,7 +550,7 @@
     font-size: 4rem;
     color: #fff;
     text-shadow: 0 0.5rem 2rem black;
-    z-index: 9;
+    z-index: 2;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -606,11 +606,11 @@
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 99999;
+    z-index: 99;
 }
 
 .story-overlay .category-container {
-    z-index: 99;
+    z-index: 100;
     position: fixed;
     top: 4rem;
     right: 3rem;
@@ -684,7 +684,7 @@
 }
 
 .story-overlay #story-close-btn {
-    z-index: 99;
+    z-index: 100;
     position: fixed;
     top: 5rem;
     fill: #fff;

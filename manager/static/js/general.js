@@ -121,7 +121,6 @@ const postReq = async (uri, data = null, csrf = null, type = 1) => {
     }).then(response => {
         if (response.status === 429) {
             const retryAfter = response.headers.get('Retry-After');
-            console.log(retryAfter)
             return {statusCode: response.status, data: {'retryAfter': retryAfter}};
         }
         return response.json().then(data => ({statusCode: response.status, data: data}));
@@ -131,6 +130,24 @@ const postReq = async (uri, data = null, csrf = null, type = 1) => {
     })
 }
 
+const deleteReq = async (uri, csrf = null, type = 1) => {
+    let url = uri
+    if (type !== 1) {
+        url = baseUrl + uri
+    }
+    return await fetch(url, {
+        method: "DELETE",
+        body: null,
+        headers: {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrf
+        }
+    }).then(response => {
+        return true
+    }).catch(err => {
+        throw err;
+    })
+}
 document.addEventListener('DOMContentLoaded', () => {
     const sideMenuOpenBtn = document.getElementById("side-menu-btn")
     const sideMenuOverlay = document.getElementById("side-menu-overlay")
@@ -155,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const priceElements = document.querySelectorAll('.price-element')
     priceElements.forEach(ele => {
-        const newtext = new Intl.NumberFormat().format(ele.textContent)
-        ele.innerHTML = newtext
+        const newText = new Intl.NumberFormat().format(ele.textContent)
+        ele.innerHTML = newText
     })
 })
 

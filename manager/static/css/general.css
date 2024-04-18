@@ -290,7 +290,7 @@ body {
 }
 
 .header {
-    z-index: 999 !important;
+    z-index: 89 !important;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -324,6 +324,7 @@ body {
 
 .header #side-menu-close-btn {
     background-color: transparent;
+    z-index: 92;
     border: none;
     outline: none;
     cursor: pointer;
@@ -338,7 +339,7 @@ body {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 99999999 !important;
+    z-index: 91;
     height: 100%;
     width: 100%;
 }
@@ -392,8 +393,6 @@ body {
     right: -0.8rem;
     font-size: 1.2rem;
     padding: 0 0.6rem;
-    padding-top: 0.1rem;
-    aspect-ratio: 1/1;
 }
 
 .nav a {
@@ -454,7 +453,7 @@ body {
     background-color: #fff;
     box-shadow: 0 1rem 2rem #0000003f;
     border-radius: 0.5rem;
-    z-index: 999999;
+    z-index: 90;
     padding: 1rem 0.5rem;
 }
 
@@ -559,7 +558,7 @@ body {
     display: none;
     flex-direction: column;
     gap: 0.5rem;
-    z-index: 999999;
+    z-index: 90;
     box-shadow: 0 1rem 2rem #00000050;
     max-height: 20rem;
     overflow: auto;
@@ -909,7 +908,7 @@ input.number {
     width: 100%;
     overflow: hidden;
     align-items: center;
-    z-index: 99990;
+    z-index: 50;
     border-top: 0.3rem solid #dedede;
     flex-wrap: nowrap;
     padding: 1rem 0;
@@ -971,8 +970,6 @@ input.number {
     right: -0.8rem;
     font-size: 1.2rem;
     padding: 0 0.6rem;
-    padding-top: 0.1rem;
-    aspect-ratio: 1/1;
 }
 
 /*//////////*/

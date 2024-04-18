@@ -25,9 +25,10 @@ class BasketLineSerializer(serializers.ModelSerializer):
                                               color__name=attrs['inventory']['color'])
             if inventory.quantity >= attrs['quantity']:
                 return attrs
-            raise ValidationError('quantity cant more than capacity')
+            attrs['quantity'] = inventory.quantity
+            return attrs
         except Inventory.DoesNotExist:
-            raise ValidationError('wrong information1')
+            raise ValidationError('wrong information')
 
     def create(self, validated_data):
         try:

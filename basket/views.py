@@ -23,6 +23,5 @@ class BasketLineAPI(ListCreateAPIView):
 
 
 class BasketLineDestroyAPI(DestroyAPIView):
-    # serializer_class =
     queryset = BasketLine.objects.all()
     lookup_url_kwarg = 'basket_line_id'

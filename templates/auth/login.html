@@ -84,7 +84,7 @@
                             const timeString = days + ' روز ' + hours + ' ساعت ' + minutes + ' دقیقه ' + seconds + ' ثانیه '
                             showMessage('حداکثر درخواست مجاز', 'لطفا بعدا تلاش کنید. ' + timeString, 'error')
                         }
-                        if (statusCode === 201) {
+                        else if (statusCode === 201) {
                             showMessage(null, 'کد با موفقیت ارسال شد', 'success')
                             switchStep('2')
                             codeInputs[0].focus()
