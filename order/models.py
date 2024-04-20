@@ -5,12 +5,24 @@ from basket.models import Basket
 from lib.base_model import BaseModel
 import uuid
 from product.models import Product, Size, Color
+from manager.models import ShippingPrice
 
 
 class Order(BaseModel):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='order')
     basket = models.ForeignKey(Basket, null=True, blank=True, on_delete=models.SET_NULL, related_name='orders')
     address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.CASCADE, related_name='orders')
+
+    def get_shipping_price(self):
+        if self.basket.get_total_price() >= 500000:
+            return 0
+        shipping_price = ShippingPrice.objects.first()
+        if shipping_price:
+            return shipping_price.price
+        return 30000
+
+    def get_final_price(self):
+        return self.basket.get_total_price() + self.get_shipping_price()
 
     def __str__(self):
         return f"{self.user}-order"

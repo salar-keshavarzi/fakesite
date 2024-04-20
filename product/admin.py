@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import register
-from product.models import Category, Product, Attribute, ProductImage, Size, Color, Inventory, Brand
+from product.models import Category, Product, Attribute, ProductImage, Size, Color, Inventory, Brand, Seller
 from lib.base_model import CustomModelAdmin
 
 
@@ -37,7 +37,7 @@ class CategoryAdmin(CustomModelAdmin):
 @register(Product)
 class ProductAdmin(CustomModelAdmin):
     list_display = ('id', 'title', 'category', 'first_price', 'discount', 'get_total_quantity', 'is_active')
-    list_filter = ('is_active', 'category__title')
+    list_filter = ('is_active', 'category__title', 'seller')
     search_fields = ('id', 'title', 'category__title')
     inlines = (ProductInventoryInline, ProductAttributeInline, ProductImageInline)
 
@@ -78,3 +78,10 @@ class InventoryAdmin(CustomModelAdmin):
     list_display = ('id', 'product', 'size', 'color', 'quantity', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('id', 'product__id')
+
+
+@register(Seller)
+class SellerAdmin(CustomModelAdmin):
+    list_display = ('id', 'name', 'phone_number')
+    list_filter = ('is_active',)
+    search_fields = ('id', 'name')

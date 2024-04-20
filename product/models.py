@@ -7,6 +7,18 @@ from lib.utils import attach_logo
 from lib.base_model import CustomImageField
 
 
+class Seller(BaseModel):
+    name = models.CharField(max_length=48, verbose_name=_('name'))
+    phone_number = models.CharField(max_length=24, verbose_name=_('phone number'))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('seller')
+        verbose_name_plural = _('sellers')
+
+
 class Category(BaseModel):
     title = models.CharField(max_length=48, unique=True, verbose_name=_('category title'))
 
@@ -48,6 +60,8 @@ class Product(BaseModel):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brands')
     visit_count = models.PositiveIntegerField(default=0, verbose_name=_('visit count'))
     buy_count = models.PositiveIntegerField(default=0, verbose_name=_('buy count'))
+    seller = models.ForeignKey(Seller, null=True, on_delete=models.SET_NULL,
+                               related_name='products', verbose_name=_('seller'))
     objects = ProductManager()
 
     @classmethod

@@ -57,11 +57,14 @@ class BasketLineDestroySerializer(serializers.ModelSerializer):
 
 class BasketSerializer(serializers.ModelSerializer):
     basket_lines = BasketLineSerializer(many=True, required=False)
-    total_quantity = serializers.IntegerField(source='get_total_quantity', required=False)
+    total_quantity = serializers.IntegerField(source='get_total_quantity', required=False, read_only=True)
+    package_price = serializers.IntegerField(source='get_package_price', required=False, read_only=True)
+    total_discount = serializers.IntegerField(source='get_total_discount', required=False, read_only=True)
+    total_price = serializers.IntegerField(source='get_total_price', required=False, read_only=True)
 
     class Meta:
         model = Basket
-        fields = ('id', 'basket_lines', 'total_quantity')
+        fields = ('id', 'basket_lines', 'total_quantity', 'package_price', 'total_discount', 'total_price')
         extra_kwargs = {
             'id': {'read_only': True},
             'basket_lines': {'read_only': True},

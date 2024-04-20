@@ -83,7 +83,7 @@ class Address(BaseModel):
         return f"{self.region} - {self.city} - {self.address_detail}"
 
     def get_full_address(self):
-        return f"{str(self.user)} : {self.region} - {self.city} - {self.address_detail} - {self.zipcode} [ {self.fullname} - {self.phone_number} ]"
+        return f"{self.region} - {self.city} - {self.address_detail} - {self.zipcode}  ( گیرنده: {self.fullname} {self.phone_number} )"
 
     def __str__(self):
         return f"{self.id}-{str(self.user)}-address"
