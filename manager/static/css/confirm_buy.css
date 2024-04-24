@@ -1,0 +1,206 @@
+.confirm-buy-page-container p.hint {
+    font-size: 1.4rem;
+    color: #5e5e5e;
+}
+
+.confirm-buy-page-container .btn-container svg {
+    width: 2rem;
+}
+
+.confirm-buy-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 3rem;
+    height: 100%;
+    padding: 2rem 10rem;
+
+}
+
+.confirm-buy-page-container .success-buy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    justify-content: center;
+    border: 0.1rem solid #dedede;
+    padding: 4rem 3rem;
+    border-radius: 1rem;
+}
+
+.confirm-buy-page-container .success-buy-container .message-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-buy-page-container .success-buy-container .message-container .message {
+    font-size: 2rem;
+    color: #08e100;
+
+}
+
+.confirm-buy-page-container .success-buy-container .message-container svg {
+    width: 4rem;
+    fill: #08e100;
+}
+
+.confirm-buy-page-container .success-buy-container .btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: rem;
+}
+
+.confirm-buy-page-container .success-buy-container .btn-container .orders-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.6rem;
+    color: #fff;
+    padding: 1rem 2rem 1rem 1rem;
+    border-radius: 1rem;
+    transition-duration: 150ms;
+    background: #3b7ae4;
+    background: linear-gradient(45deg, #3b7ae4 0%, #1fa5ff 100%);
+}
+
+.confirm-buy-page-container .success-buy-container .btn-container .orders-link:hover {
+    background-color: #227bb6;
+    background: linear-gradient(45deg, #2b65ca 0%, #1593e6 100%);
+
+
+}
+
+.confirm-buy-page-container .no-information-buy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    justify-content: center;
+    border: 0.1rem solid #dedede;
+    padding: 4rem 3rem;
+    border-radius: 1rem;
+}
+
+.confirm-buy-page-container .no-information-buy-container .message-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-buy-page-container .no-information-buy-container .message-container .message {
+    font-size: 2rem;
+    color: #cccf00;
+
+}
+
+.confirm-buy-page-container .no-information-buy-container .message-container svg {
+    width: 3rem;
+}
+
+.confirm-buy-page-container .no-information-buy-container .btn-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.confirm-buy-page-container .no-information-buy-container .btn-container a {
+    background-color: #eee;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.confirm-buy-page-container .no-information-buy-container .btn-container .orders-link {
+    color: #fff;
+    transition-duration: 150ms;
+    padding: 1rem 2rem 1rem 1rem;
+    background: #3b7ae4;
+    background: linear-gradient(45deg, #3b7ae4 0%, #1fa5ff 100%);
+}
+
+.confirm-buy-page-container .no-information-buy-container .btn-container .orders-link:hover {
+    background-color: #227bb6;
+    background: linear-gradient(45deg, #2b65ca 0%, #1593e6 100%);
+}
+
+.confirm-buy-page-container .failure-buy-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    justify-content: center;
+    border: 0.1rem solid #dedede;
+    padding: 4rem 3rem;
+    border-radius: 1rem;
+}
+
+.confirm-buy-page-container .failure-buy-container .message-container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-buy-page-container .failure-buy-container .message-container .message {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    font-size: 2rem;
+    font-size: 2rem;
+    color: #fe1212;
+}
+
+.confirm-buy-page-container .failure-buy-container .btn-container {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.confirm-buy-page-container .failure-buy-container .btn-container a {
+    font-size: 1.6rem;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #eee;
+    border-radius: 1rem;
+}
+
+.confirm-buy-page-container .failure-buy-container .btn-container .orders-link {
+    color: #fff;
+    transition-duration: 150ms;
+    padding: 1rem 2rem 1rem 1rem;
+    background: #3b7ae4;
+    background: linear-gradient(45deg, #3b7ae4 0%, #1fa5ff 100%);
+}
+
+.confirm-buy-page-container .failure-buy-container .btn-container .orders-link:hover {
+    background-color: #227bb6;
+    background: linear-gradient(45deg, #2b65ca 0%, #1593e6 100%);
+}
+
+@media only screen and (max-width: 850px) {
+    .confirm-buy-page-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        justify-content: center;
+        border: 0.1rem solid #dedede;
+        padding: 4rem 1rem;
+        border-radius: 1rem;
+    }
+}

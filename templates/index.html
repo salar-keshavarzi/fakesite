@@ -60,9 +60,7 @@
     <div class="show-all-link">
         <a href="{% url 'product_list' %}">مشاهده تمام محصولات</a>
     </div>
-    <section class="collection">
-        {% include 'partial/home_collections.html' %}
-    </section>
+    {% include 'partial/home_collections.html' %}
 {% endblock %}
 {% block pageBottom %}
     <script>
@@ -122,7 +120,7 @@
                     const storyElement = document.createElement('a')
                     if (story?.product_id) {
                         storyElement.setAttribute('href', window.location.origin + '/product/' + story.product_id + '/')
-                    }else storyElement.setAttribute('href', '#')
+                    } else storyElement.setAttribute('href', '#')
                     storyElement.setAttribute('class', 'splide__slide item')
                     storyElement.setAttribute('data-splide-interval', '5000')
                     const storyImage = document.createElement('img')

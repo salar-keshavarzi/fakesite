@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import register
 from lib.base_model import CustomModelAdmin
-from order.models import Order, Gateway, Transaction, Buy, BuyLine, Refund
+from order.models import Order, Gateway, Transaction, Buy, BuyLine
 from django_jalali.admin.filters import JDateFieldListFilter
 
 
@@ -24,17 +24,20 @@ class GatewayAdmin(CustomModelAdmin):
 
 @register(Transaction)
 class TransactionAdmin(CustomModelAdmin):
-    list_display = ('id', 'user', 'amount', 'created_time')
+    list_display = ('id', 'user', 'amount', 'status', 'created_time')
     list_filter = (
+        'status',
         ('created_time', JDateFieldListFilter),
     )
     search_fields = ('id',)
+    readonly_fields = ('id', 'created_time', 'modified_time', 'ip')
 
 
 @register(Buy)
 class BuyAdmin(CustomModelAdmin):
     list_display = ('id', 'user', 'total_amount', 'created_time')
     list_filter = (
+        'refund',
         ('created_time', JDateFieldListFilter),
     )
     search_fields = ('id', 'user')
@@ -47,10 +50,3 @@ class BuyLineAdmin(CustomModelAdmin):
     search_fields = ('id', 'buy__id')
 
 
-@register(Refund)
-class RefundAdmin(CustomModelAdmin):
-    list_display = ('id', 'buy', 'created_time')
-    list_filter = (
-        ('created_time', JDateFieldListFilter),
-    )
-    search_fields = ('id', 'buy__id')

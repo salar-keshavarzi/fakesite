@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 ALLOWED_HOSTS = ['*']
-
+DOMAIN = 'http://127.0.0.1:8000/' if DEBUG else 'http://rozhishop.ir/'
 INSTALLED_APPS = [
     "admin_persian",
     'django.contrib.admin',
@@ -143,4 +143,7 @@ SESSION_COOKIE_SAMESITE = 'None'
 #     }
 # }
 LOGIN_URL = "login"
-handler404 = 'product.ProductListView'
+# handler404 = 'product.ProductListView'
+
+MERCHANT = "00000000-0000-0000-0000-000000000000"
+SANDBOX = True

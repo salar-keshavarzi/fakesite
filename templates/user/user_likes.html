@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_likes.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="user-likes-page-container user-panel-page">
+        <button class="active-navigation-btn">نمایش منوی کاربری</button>
+        {% include 'partial/dashboard.html' %}
+        <section class="content-section">
+            <div class="content-header">
+                <svg width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                            d="M22 8.86222C22 10.4087 21.4062 11.8941 20.3458 12.9929C17.9049 15.523 15.5374 18.1613 13.0053 20.5997C12.4249 21.1505 11.5042 21.1304 10.9488 20.5547L3.65376 12.9929C1.44875 10.7072 1.44875 7.01723 3.65376 4.73157C5.88044 2.42345 9.50794 2.42345 11.7346 4.73157L11.9998 5.00642L12.2648 4.73173C13.3324 3.6245 14.7864 3 16.3053 3C17.8242 3 19.2781 3.62444 20.3458 4.73157C21.4063 5.83045 22 7.31577 22 8.86222Z"
+                            stroke="currentColor" stroke-linejoin="round"/>
+                </svg>
+                <h1 class="legend">لیست علاقه‌مندی ها</h1>
+            </div>
+            <ul class="likes-list">
+                {% if likes %}
+                    {% for like in likes %}
+                        <li class="like-item">
+                            <a href="{% url 'product' like.product_id %}" class="product-container">
+                                <img class="product-image" src="{{ like.product.get_image.url }}" alt="">
+                                <h3 class="product-title">{{ like.product.title|truncatechars:20 }}</h3>
+                            </a>
+                            <div class="like-datetime">
+                                <span class="time">{{ like.created_time|date:'H:i' }}</span>
+                                <span class="date">{{ like.created_time|date:'Y/m/d' }}</span>
+                            </div>
+                            <a href="{% url 'user_like_delete' like.id %}" class="remove-link">
+                                <svg fill="none" height="24" viewBox="0 0 24 24" width="24"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                            d="m19 7-.8673 12.1425c-.0748 1.0466-.9457 1.8575-1.9949 1.8575h-8.27556c-1.04928 0-1.92016-.8109-1.99492-1.8575l-.86732-12.1425m5 4v6m4-6v6m1-10v-3c0-.55228-.4477-1-1-1h-4c-.55228 0-1 .44772-1 1v3m-5 0h16"
+                                            stroke="#ff005c" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"/>
+                                </svg>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p class="result-not-found"
+                       style="width: 100%; text-align: center; font-size: 2.6rem; color: #727272;">
+                        موردی یافت نشد</p>
+                {% endif %}
+            </ul>
+        </section>
+    </div>
+{% endblock %}
+{% block pageBottom %}
+{% endblock %}

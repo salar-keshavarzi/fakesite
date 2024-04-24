@@ -43,12 +43,14 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
                               verbose_name=_('email'))
     first_name = models.CharField(max_length=150, blank=True, null=True, verbose_name=_('firstname'))
     last_name = models.CharField(max_length=150, blank=True, null=True, verbose_name=_('lastname'))
+    human_id = models.CharField(max_length=10, blank=True, null=True, verbose_name=_('human id'))
     is_active = models.BooleanField(default=True, verbose_name=_('is active'))
     is_staff = models.BooleanField(default=False, verbose_name=_('is staff'))
     registered_time = jDateTimeField(auto_now_add=True, verbose_name=_('registered time'))
     last_login = jDateTimeField(blank=True, null=True, verbose_name=_('last login'))
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name=_('date joined'))
     last_otp = models.PositiveBigIntegerField(null=True, blank=True, editable=False, verbose_name=_('last otp'))
+    otp_try = models.PositiveSmallIntegerField(default=5, verbose_name=_('otp try number'))
     default_manager = UserManager()
     objects = CustomUserManager()
     # objects = UserManager()
@@ -74,13 +76,13 @@ class Address(BaseModel):
     user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='addresses')
     region = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('region'))
     city = models.CharField(max_length=32, blank=True, null=True, verbose_name=_('city'))
-    address_detail = models.TextField(null=True, blank=True, verbose_name=_('address detail'))
+    address_detail = models.TextField(max_length=500, null=True, blank=True, verbose_name=_('address detail'))
     fullname = models.CharField(max_length=48, blank=True, null=True, verbose_name=_('receiver fullname'))
     phone_number = models.CharField(max_length=11, blank=True, null=True, verbose_name=_('receiver phone number'))
     zipcode = models.CharField(max_length=24, blank=True, null=True, verbose_name=_('zipcode'))
 
     def get_address(self):
-        return f"{self.region} - {self.city} - {self.address_detail}"
+        return f"{self.region} - {self.city} - {self.address_detail} - {self.zipcode} "
 
     def get_full_address(self):
         return f"{self.region} - {self.city} - {self.address_detail} - {self.zipcode}  ( گیرنده: {self.fullname} {self.phone_number} )"

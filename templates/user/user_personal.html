@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_personal.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="user-personal-page-container user-panel-page">
+        <button class="active-navigation-btn">نمایش منوی کاربری</button>
+        {% include 'partial/dashboard.html' %}
+        <section class="content-section">
+            <h1 class="legend">
+                <svg fill="none" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#2a353d" stroke-width="1.1">
+                        <path
+                                d="m6.57757 15.4816c-1.41477.8424-5.12421 2.5625-2.86491 4.715 1.10365 1.0514 2.33283 1.8034 3.87821 1.8034h8.81823c1.5454 0 2.7746-.752 3.8782-1.8034 2.2593-2.1525-1.4501-3.8726-2.8649-4.715-3.3176-1.9755-7.52721-1.9755-10.84483 0z"
+                                stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                                d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/>
+                    </g>
+                </svg>
+                مشخصات کاربر
+            </h1>
+            <form action="{% url 'user_panel' %}" method="post" class="personal-info-form">
+                {% csrf_token %}
+                <label class="item">
+                    <span class="title">نام</span>
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
+                </label>
+                <label class="item">
+                    <span class="title">نام خانوادگی</span>
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
+                </label>
+                <label class="item">
+                    <span class="title">کد ملی</span>
+                    {{ form.human_id }}
+                    {{ form.human_id.errors }}
+                </label>
+                <button type="submit">ذخیره</button>
+            </form>
+        </section>
+    </div>
+{% endblock %}
+{% block pageBottom %}
+{% endblock %}

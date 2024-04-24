@@ -1,0 +1,92 @@
+.user-transactions-page-container {}
+
+.user-transactions-page-container .content-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: calc(100% - 40rem);
+}
+
+.user-transactions-page-container .content-section .legend {
+    font-weight: normal;
+    font-size: 1.6rem;
+}
+
+.user-transactions-page-container .content-section .transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 1.4rem;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+    border-radius: 0.2rem;
+    background-color: #ffffff;
+    border: 0.1rem solid #c1c1c1;
+    border-right: 0.5rem solid #c1c1c1;
+    justify-content: space-around;
+    text-align: right;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item.success {
+    background-color: #0037ff13;
+    border: 0.1rem solid #0088ff96;
+    border-right: 0.5rem solid #0088ff96;
+
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item.failure {
+    background-color: #ff005d18;
+    border: 0.1rem solid #ff005d63;
+    border-right: 0.5rem solid #ff005d63;
+
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item.no-information {
+    background-color: #f2ff0019;
+    border: 0.1rem solid #ffb300;
+    border-right: 0.5rem solid #ffb300;
+
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item span {
+    color: #535353;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item>* {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item svg {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item .price-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item .currency>* {
+    flex-shrink: 0;
+}
+
+.user-transactions-page-container .content-section .transactions-list .transaction-item .currency svg {
+    width: 1.6rem;
+}
+
+@media only screen and (max-width: 700px) {
+    .user-transactions-page-container .content-section {
+        width: 100%;
+    }
+}

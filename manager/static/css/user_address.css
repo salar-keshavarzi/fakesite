@@ -1,0 +1,114 @@
+.user-address-page-container {
+}
+
+.user-address-page-container .content-section {
+    width: calc(100% - 40rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.user-address-page-container .content-section .content-header {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-address-page-container .content-section .content-header .legend {
+    font-size: 1.6rem;
+    font-weight: normal;
+}
+
+.user-address-page-container .content-section .content-header svg {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+.user-address-page-container .content-section .address-form {
+    background-color: #fff;
+    /* padding: 4rem 2rem 1.5rem 2rem; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    font-size: 1.4rem;
+    width: 100%;
+}
+
+.user-address-page-container .content-section .address-form .item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    width: 46%;
+}
+
+.user-address-page-container .content-section .address-form .item label {
+    padding-right: 1rem;
+    color: #686868;
+}
+
+.user-address-page-container .content-section .address-form .item label.mandatory::after {
+    content: " * ";
+    color: #ff005c;
+}
+
+.user-address-page-container .content-section .address-form .item input {
+    border: 0.1rem solid #dedede;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    outline: none;
+    font-size: 1.6rem;
+    color: #464646;
+}
+
+.user-address-page-container .content-section .address-form .item textarea {
+    border-radius: 0.5rem;
+    /* width: 52rem; */
+    height: 15rem;
+    padding: 1rem;
+    outline: none;
+    border: 0.1rem solid #dedede;
+    resize: none !important;
+    font-size: 1.6rem;
+    color: #464646;
+}
+
+.user-address-page-container .content-section .address-form .item input:focus,
+.user-address-page-container .content-section .address-form .item textarea:focus {
+    border-color: #3498db;
+}
+
+.user-address-page-container .content-section .address-form button.submit {
+    cursor: pointer;
+    width: 24rem;
+    padding: 1rem;
+    outline: none;
+    border: none;
+    background-color: #ff005c;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    color: #fff;
+    margin-top: 3rem;
+    height: fit-content;
+
+}
+
+@media only screen and (max-width: 700px) {
+    .user-address-page-container .content-section {
+        width: 100%;
+    }
+
+    .user-address-page-container .content-section .address-form {
+        justify-content: center;
+    }
+
+    .user-address-page-container .content-section .address-form .item {
+        width: 100%;
+    }
+
+    .user-address-page-container .content-section .address-form button.submit {
+        width: 100%;
+    }
+}

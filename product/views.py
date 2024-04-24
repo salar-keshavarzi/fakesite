@@ -5,6 +5,8 @@ from django.http import QueryDict, Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from rest_framework.generics import ListAPIView
+
+from activity.forms import CommentForm, ReplyForm
 from activity.models import Comment, Like
 from product.serializers import ProductSerializer
 from product.models import Product, Brand, Category, ProductImage, Inventory
@@ -20,7 +22,7 @@ class ProductListAPI(ListAPIView):
         search = self.request.query_params.get('search', None)
         if search:
             return Product.search(product_title=search)
-        return super().get_queryset()
+        return super().get_queryset()[:10]
 
 
 # class ProductListView(View):
@@ -105,9 +107,12 @@ class ProductPageView(View):
         inventories = Inventory.objects.filter(product=product, quantity__gt=0).select_related('color').all()
         comments = Comment.get_by_product(product=product)
         favorite = False
+        comment_form = CommentForm()
+        reply_form = ReplyForm()
         if request.user.is_authenticated:
             if temp := Like.objects.filter(user=request.user, product=product).first():
                 favorite = temp
         return render(request, template_name='product/product.html',
                       context={'product': product, 'product_images': images, 'inventories': inventories,
-                               'comments': comments, 'favorite': favorite})
+                               'comments': comments, 'favorite': favorite,
+                               'comment_form': comment_form, 'reply_form': reply_form})

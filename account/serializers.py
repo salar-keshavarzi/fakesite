@@ -1,13 +1,9 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-
-from account.models import LoginCode, UserModel, BlockUser, Address
+from account.models import LoginCode, UserModel, BlockUser
 import re
 from django.utils.translation import gettext_lazy as _
 from lib.otp import send_otp
 import time
-
-from order.models import Order
 
 
 class LoginCodeSerializer(serializers.ModelSerializer):
@@ -28,6 +24,7 @@ class LoginCodeSerializer(serializers.ModelSerializer):
         try:
             user = UserModel.objects.get(username=phone_number)
             new_password = UserModel.objects.make_random_password(length=6, allowed_chars='0123456789')
+            user.otp_try = 5
             user.set_password(new_password)
             user.save()
         except UserModel.DoesNotExist:
@@ -38,18 +35,3 @@ class LoginCodeSerializer(serializers.ModelSerializer):
         send_otp(phone_number, new_password)
         login_code = super().create(validated_data)
         return login_code
-
-
-class OrderAddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = ('id', 'address')
-        extra_kwargs = {
-            'id': {'read_only': True, 'required': False}
-        }
-
-    def validate(self, attrs):
-        address = attrs.get('address')
-        if self.instance.user == address.user:
-            return attrs
-        raise ValidationError('address does not belong to this user')

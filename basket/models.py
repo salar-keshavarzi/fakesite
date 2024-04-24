@@ -35,11 +35,14 @@ class Basket(BaseModel):
         return total_price
 
     def get_basket_lines(self):
-        return BasketLine.objects.filter(basket=self)
+        return BasketLine.objects.select_related('inventory').filter(basket=self).all()
 
     def get_total_quantity(self):
         return BasketLine.objects.filter(basket=self).aggregate(total_quantity=Coalesce(Sum('quantity'), 0)).get(
             'total_quantity', 0)
+
+    def clear(self):
+        BasketLine.objects.filter(basket=self).delete()
 
     def __str__(self):
         return f"{self.id}-basket"

@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_support.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="user-support-page-container user-panel-page">
+        <button class="active-navigation-btn">نمایش منوی کاربری</button>
+        {% include 'partial/dashboard.html' %}
+        <section class="content-section">
+            <div class="alert-container">
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#ff005c" stroke-width="2">
+                        <path
+                                d="m21 12c0 4.9706-4.0294 9-9 9-4.97056 0-9-4.0294-9-9 0-4.97056 4.02944-9 9-9 4.9706 0 9 4.02944 9 9z"/>
+                        <g stroke-linecap="round">
+                            <path d="m12 8v5"/>
+                            <path d="m12 16v-.0112"/>
+                        </g>
+                    </g>
+                </svg>
+                <p class="alert">
+                    لطفا متن خود را در قالب یک پیغام ارسال کنید. پیغام شما حداکثر تا 24 ساعت آینده پاسخ داده
+                    خواهد شد.
+                </p>
+            </div>
+            <div class="content-header">
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <path clip-rule="evenodd"
+                          d="m12 3c-3.31371 0-6 2.68629-6 6v3 5h-5v-8h3c0-4.41828 3.58172-8 8-8 4.4183 0 8 3.58172 8 8h3v8h-3c0 2.7614-2.2386 5-5 5v1h-6v-4h6v1c1.6569 0 3-1.3431 3-3v-8c0-3.31371-2.6863-6-6-6z"
+                          fill="#fff" fill-rule="evenodd"/>
+                </svg>
+                <h1 class="legend">پشتیبانی</h1>
+                <a class="delete-history-link" href="{% url 'user_support_clear' %}">
+                    <span>حذف تاریخچه</span>
+                    <span>
+                    <svg viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg"><path
+                            d="m17.564453 2.7558594-3.265625 5.8183594-2.416016-1.4355469-1.021484 1.71875 5.650391 3.3593751 1.021484-1.720703-2.375-1.4121096 3.277344-5.8398438zm-10.564453 3.2441406a1 1 0 0 0 -1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0 -1-1zm-3.5 1a.5.5 0 0 0 -.5.5.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0 -.5-.5zm1.5 2a1 1 0 0 0 -1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0 -1-1zm5 1c-1.1184875 1.564268-3.1644945 2.810894-7 3v1c2.1137135 3.371692 5 5 9 5h1c1.311249-1.587195 2.357513-3.032381 3-5v-1l-5-3zm.529297 1.101562 4.328125 2.597657c-.572828 1.546641-1.472018 2.903614-2.583984 4.269531-3.2734385.03125-6.22067-1.428212-7.9472661-4.138672 3.118216-.310618 5.0195437-1.284772 6.2031251-2.728516z"
+                            fill="#fff"/></svg>
+                    </span>
+                </a>
+            </div>
+            <ul class="messages-list">
+                {% for support in supports %}
+                    <li class="message-item user-message">
+                        <div class="message-container">
+                            <p class="message-content">{{ support.message }}</p>
+                            <span class="message-datetime">
+                                    <span class="time">{{ support.created_time|date:'H:i' }}</span>
+                                    <span class="date">{{ support.created_time|date:'Y/m/d' }}</span>
+                                </span>
+                        </div>
+                    </li>
+                    {% if support.is_answered %}
+                        <li class="message-item admin-message">
+                            <svg class="admin-avatar" fill="none" height="32" viewBox="0 0 32 32" width="32"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <g stroke="#1f77b2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                    <path
+                                            d="m8.96387 7.30267c.1166-1.16864.5253-2.28917 1.18853-3.25844.6631-.96928 1.5595-1.75615 2.6065-2.28819 1.047-.53203 2.2111-.792135 3.385-.756361 1.1739.035771 2.3199.366271 3.3326.961081 1.0127.5948 1.8594 1.43479 2.4624 2.44265.6029 1.00786.9426 2.1512.9879 3.32477.0452 1.17357-.2055 2.33962-.7291 3.39092-.5184 1.0409-1.2878 1.936-2.2386 2.6049"/>
+                                    <path
+                                            d="m9.91895 4.46667c1.08345 1.11858 2.38085 2.00782 3.81505 2.61482 1.4341.607 2.9756.91937 4.5329.91852 1.5566.00155 3.0974-.30996 4.5309-.91584"/>
+                                    <path
+                                            d="m14.4307 13c-.3956 0-.7823.1173-1.1112.3371-.3289.2197-.5852.5321-.7366.8975-.1514.3655-.191.7676-.1138 1.1556.0772.3879.2676.7443.5474 1.024.2797.2797.636.4702 1.024.5474.3879.0771.7901.0375 1.1555-.1138.3655-.1514.6778-.4078.8976-.7367s.3371-.7155.3371-1.1111c0-.5304-.2107-1.0391-.5858-1.4142s-.8838-.5858-1.4142-.5858z"/>
+                                    <path
+                                            d="m6.43066 9.56267v1.43733c0 1.0609.42143 2.0783 1.17158 2.8284.75014.7502 1.76756 1.1716 2.82846 1.1716h1.9547"/>
+                                    <path
+                                            d="m28.9333 31c0-2.3778-.6527-4.71-1.8871-6.7423-1.2303-2.0256-2.9913-3.6759-5.0921-4.7722"/>
+                                    <path
+                                            d="m2.93359 31c-.00026-2.3775.65208-4.7095 1.88594-6.7418 1.22662-2.0204 2.98116-3.6675 5.0743-4.7642"/>
+                                </g>
+                            </svg>
+                            <div class="message-container">
+                                <p class="message-content">{{ support.response }}</p>
+                                <span class="message-datetime">
+                                    <span class="date">{{ support.modified_time|date:'Y/m/d' }}</span>
+                        </span>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <script>
+                const messsageList = document.querySelector('.messages-list');
+                messsageList.scrollTop = messsageList.scrollHeight;
+            </script>
+            <form action="{% url 'user_panel_support' %}" method="post" class="message-form">
+                {% csrf_token %}
+                {{ form.message }}
+                <button class="submit" type="submit">
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path
+                                d="m11.585 18.01-6.01005-6.01 6.01005-6.00999 1.415 1.414-4.60005 4.59999 4.60005 4.6-1.414 1.406zm5.425 0-6.011-6.01 6.011-6.00999 1.414 1.414-4.6 4.59999 4.6 4.6-1.413 1.406z"
+                                fill="#1f77b2"/>
+                    </svg>
+                    <span>ارسال</span>
+                </button>
+            </form>
+        </section>
+    </div>
+{% endblock %}
+{% block pageBottom %}
+{% endblock %}

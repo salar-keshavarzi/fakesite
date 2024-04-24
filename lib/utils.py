@@ -13,7 +13,7 @@ def attach_logo(main_image):
     right = (main_width + min_dim) // 2
     bottom = (main_height + min_dim) // 2
     main_image = main_image.crop((left, top, right, bottom))
-    main_image = main_image.resize((800, 800),)
+    main_image = main_image.resize((800, 800), )
     main_width, main_height = main_image.size
     min_dim = min(main_width, main_height)
     max_logo_size = min_dim // 4
@@ -22,3 +22,12 @@ def attach_logo(main_image):
     logo_position = (min_dim - logo_image.width - 20, 20)
     main_image.paste(logo_image, logo_position, logo_image)
     return main_image
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

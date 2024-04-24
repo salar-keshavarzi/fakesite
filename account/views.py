@@ -2,27 +2,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render, reverse, redirect
 from django.utils.decorators import method_decorator
-from rest_framework.generics import CreateAPIView, UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.generics import CreateAPIView
 from account.models import UserModel, LoginCode, Address
-from lib.permissions import OrderAddressOwnerPermission
-from manager.models import ShippingPrice
-from product.models import Product, ProductImage
+from activity.models import Support, Comment, Like
 from django.views import View
-from account.serializers import LoginCodeSerializer, OrderAddressSerializer
+from account.serializers import LoginCodeSerializer
 from django.contrib.auth import authenticate, logout, login
 import time
 from lib.throttle import LoginThrottle1, LoginThrottle2
-from basket.models import Basket, BasketLine
-from order.models import Order
-from account.froms import AddressForm
-
-
-@login_required
-def test(request):
-    images = ProductImage.objects.all()
-    return render(request, template_name='test.html', context={'images': images})
+from order.models import Buy, Transaction
+from account.forms import AddressForm, UserForm, SupportForm
 
 
 class LoginView(View):
@@ -37,12 +26,22 @@ class LoginView(View):
         if phone_number and len(phone_number.strip()) == 11 and otp_code:
             username = phone_number.strip()
             otp = otp_code.strip()
+            try:
+                temp_user = UserModel.objects.get(username=username)
+                if temp_user.otp_try > 0:
+                    temp_user.otp_try -= 1
+                    temp_user.save()
+                else:
+                    return render(request, template_name='auth/login.html', context={'step': 1})
+            except UserModel.DoesNotExist:
+                pass
             user = authenticate(username=username, password=otp)
             if user:
-                login(request, user)
-                if request.GET.get('next'):
-                    return redirect(request.GET.get('next'))
-                return redirect('home')
+                if user.otp_try > 0:
+                    login(request, user)
+                    if request.GET.get('next'):
+                        return redirect(request.GET.get('next'))
+                    return redirect('home')
             else:
                 user = UserModel.objects.filter(username=phone_number).first()
                 if user:
@@ -65,110 +64,164 @@ class LogOutView(View):
         return redirect('home')
 
 
-class UserBasket(View):
-    def get(self, request):
-        basket_id = request.COOKIES.get('basket_id', None)
-        if basket_id:
-            try:
-                basket = Basket.objects.get(id=basket_id)
-                basket_lines = BasketLine.objects.filter(basket=basket).select_related('inventory', 'product',
-                                                                                       'product__seller',
-                                                                                       'inventory__color',
-                                                                                       'inventory__size').all()
-            except Basket.DoesNotExist:
-                raise Http404
-            return render(request, template_name='basket/basket.html',
-                          context={'basket': basket, 'basket_lines': basket_lines})
-        return render(request, template_name='basket/basket.html')
-
-
-class UserOrder(View):
+class UserPanelPersonalView(View):
+    form_class = UserForm
 
     @method_decorator(login_required)
     def get(self, request):
-        basket_id = request.COOKIES.get('basket_id', None)
-        if basket_id:
-            try:
-                basket = Basket.objects.get(id=basket_id)
-                basket_lines = BasketLine.objects.filter(basket=basket).select_related('inventory', 'product',
-                                                                                       'product__seller',
-                                                                                       'inventory__color',
-                                                                                       'inventory__size').all()
-                order = Order.objects.get(basket_id=basket_id)
-            except Basket.DoesNotExist:
-                raise Http404
-            except Order.DoesNotExist:
-                order = Order.objects.create(basket=basket, user=request.user)
-            addresses = Address.objects.filter(user=request.user).all()
-            shipping_price = order.get_shipping_price()
-            order_address = Address.objects.filter(user=request.user).first()
-            if order_address and not order.address:
-                order.address = order_address
-                order.save()
-            if basket.get_total_price() == 0:
-                return redirect('basket')
-            return render(request, template_name='order/order.html',
-                          context={'order': order, 'basket': basket, 'basket_lines': basket_lines,
-                                   'addresses': addresses, 'shipping_price': shipping_price})
-        return render(request, template_name='order/order.html', )
+        user = request.user
+        form_data = {'username': user.username, 'first_name': user.first_name, 'last_name': user.last_name,
+                     'human_id': user.human_id}
+        form = self.form_class(form_data)
+        return render(request, template_name='user/user_personal.html', context={'form': form})
 
     @method_decorator(login_required)
     def post(self, request):
-        user = request.user
-        region = request.POST.get('region', None)
-        city = request.POST.get('city', None)
-        address_detail = request.POST.get('address', None)
-        fullname = request.POST.get('fullname', None)
-        phone_number = request.POST.get('phone-number', None)
-        zipcode = request.POST.get('zipcode', None)
-        if region and city and address_detail and fullname and phone_number and zipcode:
-            try:
-                Address.objects.create(
-                    user=user,
-                    region=region,
-                    city=city,
-                    address_detail=address_detail,
-                    fullname=fullname,
-                    phone_number=phone_number,
-                    zipcode=zipcode
-                )
-            except:
-                return redirect('order')
-        return redirect('order')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+        return render(request, template_name='user/user_personal.html', context={'form': form})
 
 
-class OrderAddressAPI(UpdateAPIView):
-    permission_classes = [IsAuthenticated, OrderAddressOwnerPermission]
-    serializer_class = OrderAddressSerializer
-    lookup_url_kwarg = 'order_id'
-    queryset = Order.objects.all()
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.filter(user=self.request.user)
-
-
-class ConfirmOrder(View):
+class UserPanelBuysListView(View):
     @method_decorator(login_required)
     def get(self, request):
-        basket_id = request.COOKIES.get('basket_id', None)
-        if basket_id:
-            try:
-                basket = Basket.objects.get(id=basket_id)
-                basket_lines = BasketLine.objects.filter(basket=basket).select_related('inventory', 'product',
-                                                                                       'product__seller',
-                                                                                       'inventory__color',
-                                                                                       'inventory__size').all()
-                order = Order.objects.get(basket_id=basket_id)
-            except Basket.DoesNotExist:
+        buys = Buy.get_by_user(request.user)
+        return render(request, template_name='user/user_buys.html', context={'buys': buys})
+
+
+class UserPanelTransactionsListView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        transactions = Transaction.objects.filter(user=request.user).all().order_by("-created_time")
+        return render(request, template_name='user/user_transactions.html', context={'transactions': transactions})
+
+
+class UserPanelAddressesListView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        addresses = Address.objects.filter(user=request.user).all()
+        return render(request, template_name='user/user_addresses.html', context={'addresses': addresses})
+
+
+class UserPanelAddressCreateView(View):
+    form_class = AddressForm
+
+    @method_decorator(login_required)
+    def get(self, request):
+        form = self.form_class()
+        return render(request, template_name='user/user_address.html', context={'form': form})
+
+    @method_decorator(login_required)
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            return redirect('user_panel_addresses')
+        return render(request, template_name='user/user_address.html', context={'form': form})
+
+
+class UserPanelAddressDeleteView(View):
+    @method_decorator(login_required)
+    def get(self, request, address_id):
+        try:
+            address = Address.objects.get(id=address_id)
+            if address.user == request.user:
+                address.delete()
+                return redirect('user_panel_addresses')
+            else:
                 raise Http404
-            except Order.DoesNotExist:
-                return redirect('order')
-            shipping_price = order.get_shipping_price()
-            address = order.address
-            if basket.get_total_price() == 0:
-                return redirect('basket')
-            return render(request, template_name='order/confirm_order.html',
-                          context={'order': order, 'basket': basket, 'basket_lines': basket_lines, 'address': address,
-                                   'shipping_price': shipping_price})
-        return redirect('order')
+        except Address.DoesNotExist:
+            raise Http404
+
+
+class UserPanelAddressEditView(View):
+    form_class = AddressForm
+
+    @method_decorator(login_required)
+    def get(self, request, address_id):
+        try:
+            address = Address.objects.get(id=address_id)
+        except Address.DoesNotExist:
+            raise Http404
+        form = self.form_class(instance=address)
+        return render(request, template_name='user/user_address_edit.html', context={'form': form, 'address': address})
+
+    @method_decorator(login_required)
+    def post(self, request, address_id):
+        try:
+            address = Address.objects.get(id=address_id)
+        except Address.DoesNotExist:
+            raise Http404
+        form = self.form_class(request.POST, instance=address)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return redirect('user_panel_addresses')
+        return render(request, template_name='user/user_address_edit.html', context={'form': form, 'address': address})
+
+
+class UserPanelSupportView(View):
+    form_class = SupportForm
+
+    @method_decorator(login_required)
+    def get(self, request):
+        form = self.form_class()
+        supports = Support.objects.filter(user=request.user).order_by('created_time')
+        return render(request, template_name='user/user_support.html', context={'supports': supports, 'form': form})
+
+    @method_decorator(login_required())
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+        return redirect('user_panel_support')
+
+
+class UserPanelSupportClearView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        Support.objects.filter(user=request.user).delete()
+        return redirect('user_panel_support')
+
+
+class UserPanelCommentsView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        comments = Comment.objects.filter(user=request.user).select_related('product')
+        return render(request, template_name='user/user_comments.html', context={'comments': comments})
+
+
+class UserPanelCommentDeleteView(View):
+    @method_decorator(login_required)
+    def get(self, request, comment_id):
+        try:
+            comment = Comment.objects.get(id=comment_id)
+            if comment.user == request.user:
+                comment.delete()
+            return redirect('user_panel_comments')
+        except Comment.DoesNotExist:
+            raise Http404
+
+
+class UserPanelLikesView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        likes = Like.objects.filter(user=request.user).select_related('product')
+        return render(request, template_name='user/user_likes.html', context={'likes': likes})
+
+
+class UserPanelLikeDeleteView(View):
+    @method_decorator(login_required)
+    def get(self, request, like_id):
+        try:
+            like = Like.objects.get(id=like_id)
+            if like.user == request.user:
+                like.delete()
+            return redirect('user_panel_likes')
+        except Like.DoesNotExist:
+            raise Http404

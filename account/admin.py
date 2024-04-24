@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('username',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'otp_try')}),
         (_('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions'),
         }),

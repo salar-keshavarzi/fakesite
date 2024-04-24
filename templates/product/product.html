@@ -212,8 +212,8 @@
                 <li class="add-comment-container">
                     <form action="{% url 'add_comment' product.id %}" method="post">
                         {% csrf_token %}
-                        <textarea spellcheck="false" name="comment-input" id="comment-input" required maxlength="1000"
-                                  placeholder="دیدگاه خود را در مورد این محصول بنویسید ..."></textarea>
+                        {{ comment_form.content }}
+                        {{ comment_form.content.errors }}
                         {% if request.user.is_authenticated %}
                             <button type="submit">ثبت دیدگاه</button>
                         {% else %}
@@ -271,8 +271,7 @@
                             <div class="add-reply-container">
                                 <form action="{% url 'add_reply' comment.id %}" method="post">
                                     {% csrf_token %}
-                                    <textarea name="reply-input" class="add-reply-input" required maxlength="1000"
-                                              placeholder="پاسخ خود را بنویسید .."></textarea>
+                                    {{ reply_form.content }}
                                     <button type="submit">ثبت پاسخ</button>
                                 </form>
                             </div>

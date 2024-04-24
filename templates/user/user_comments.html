@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_comments.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="user-comments-page-container user-panel-page">
+        <button class="active-navigation-btn">نمایش منوی کاربری</button>
+        {% include 'partial/dashboard.html' %}
+        <section class="content-section">
+            <div class="content-header">
+                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path
+                                d="m12 22c5.5228 0 10-4.4772 10-10 0-5.52285-4.4772-10-10-10-5.52285 0-10 4.47715-10 10 0 2.663 1.04094 5.0829 2.73812 6.875l-2.01131 2.2955c-.2832.3232-.05367.8295.37607.8295z"/>
+                        <path d="m7 9h10"/>
+                        <path d="m7 13h4"/>
+                    </g>
+                </svg>
+                <h1 class="legend">لیست دیدگاه ها</h1>
+            </div>
+            <ul class="comments-list">
+                {% if comments %}
+                    {% for comment in comments %}
+                    <li class="comment-item">
+                        <a href="{% url 'product' comment.product.id %}" class="product-container">
+                            <img class="product-image" src="{{ comment.product.get_image.url }}" alt="">
+                        </a>
+                        <div class="comment-container">
+                            <div class="comment-datetime">
+                                <span class="time">{{ comment.created_time|date:'H:i' }}</span>
+                                <span class="date">{{ comment.created_time|date:'Y/m/d' }}</span>
+                            </div>
+                            <div class="comment-content">{{ comment.content }}</div>
+                        </div>
+                        <a href="{% url 'user_comment_delete' comment.id %}" class="remove-link">
+                            <svg fill="none" height="24" viewBox="0 0 24 24" width="24"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                        d="m19 7-.8673 12.1425c-.0748 1.0466-.9457 1.8575-1.9949 1.8575h-8.27556c-1.04928 0-1.92016-.8109-1.99492-1.8575l-.86732-12.1425m5 4v6m4-6v6m1-10v-3c0-.55228-.4477-1-1-1h-4c-.55228 0-1 .44772-1 1v3m-5 0h16"
+                                        stroke="#ff005c" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <p class="result-not-found"
+                       style="width: 100%; text-align: center; font-size: 2.6rem; color: #727272;">
+                        موردی یافت نشد</p>
+                {% endif %}
+            </ul>
+        </section>
+    </div>
+{% endblock %}
+{% block pageBottom %}
+{% endblock %}

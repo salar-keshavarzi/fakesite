@@ -5,30 +5,48 @@ from django.utils.decorators import method_decorator
 from django.views.generic import View
 from rest_framework.permissions import IsAuthenticated
 
+from account.models import BlockUser
+from activity.forms import CommentForm, ReplyForm
 from activity.models import Comment, Reply, Like
 from product.models import Product
 from rest_framework.generics import CreateAPIView, DestroyAPIView
 from activity.serializers import FavoriteSerializer
 from lib.permissions import FavoriteOwnerPermission
 
+
 class ProductCommentView(View):
+    form_class = CommentForm
+
     @method_decorator(login_required)
     def post(self, request, product_id):
-        comment = request.POST.get('comment-input', None)
+        if BlockUser.objects.filter(user=request.user).exists():
+            return redirect('product', product_id=product_id)
+        form = self.form_class(request.POST)
         product = Product.objects.filter(id=product_id).first()
-        if comment and product and len(comment) < 1001:
-            Comment.objects.create(product=product, user=request.user, content=comment)
+        if product:
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user = request.user
+                instance.product = product
+                instance.save()
         return redirect('product', product_id=product_id)
 
 
 class CommentReplyView(View):
+    form_class = ReplyForm
+
     @method_decorator(login_required)
     def post(self, request, comment_id):
-        reply = request.POST.get('reply-input', None)
         try:
             comment = Comment.objects.get(id=comment_id)
-            if reply and len(reply) < 1001:
-                Reply.objects.create(user=request.user, comment=comment, content=reply)
+            form = self.form_class(request.POST)
+            if BlockUser.objects.filter(user=request.user).exists():
+                return redirect('product', product_id=comment.product_id)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user = request.user
+                instance.comment = comment
+                instance.save()
             return redirect('product', product_id=comment.product_id)
         except Comment.DoesNotExist:
             raise Http404

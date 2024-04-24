@@ -1,0 +1,109 @@
+.user-comments-page-container {
+}
+
+.user-comments-page-container .content-section {
+    width: calc(100% - 40rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.user-comments-page-container .content-section .content-header {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-comments-page-container .content-section .content-header .legend {
+    font-size: 1.6rem;
+    font-weight: normal;
+}
+
+.user-comments-page-container .content-section .content-header svg {
+    width: 1.6rem;
+    height: 1.6rem;
+}
+
+.user-comments-page-container .content-section .comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 0.1rem solid #dedede;
+    gap: 2rem;
+    padding-bottom: 4rem;
+    position: relative;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .product-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 12rem;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .product-container .product-image {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border: 0.3rem solid #dedede;
+    border-radius: 0.5rem;
+    background-color: #eee;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .product-container .product-title {
+    font-size: 1.4rem;
+    font-weight: normal;
+    color: #5e5e5e;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .comment-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: calc(100% - 17rem);
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .comment-container .comment-datetime {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .comment-container .comment-datetime > * {
+    color: #7f7f7f;
+
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .comment-container .comment-content {
+    font-size: 1.4rem;
+    line-height: 2.6rem;
+    color: #5e5e5e;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .remove-link {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+}
+
+.user-comments-page-container .content-section .comments-list .comment-item .remove-link svg {
+    width: 2.2rem;
+    height: 2.2rem;
+}
+
+@media only screen and (max-width: 700px) {
+    .user-comments-page-container .content-section {
+        width: 100%;
+    }
+
+}

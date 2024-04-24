@@ -470,7 +470,7 @@
     gap: 1rem;
 }
 
-.product-page-container #comment-input {
+.product-page-container .comment-input {
     padding: 1rem;
     border-radius: 1rem;
     outline: none;
@@ -481,7 +481,7 @@
     color: #5a5a5a;
 }
 
-.product-page-container #comment-input:focus {
+.product-page-container .comment-input:focus {
     border-color: #3498db;
 }
 

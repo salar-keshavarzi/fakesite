@@ -1,6 +1,11 @@
 {% load index_tags %}
 {% get_collections as collections %}
+{% if collections %}
+    <section class="collection">
+        {% for collection in collections %}
+            <a href="#" class="collection-item"><img src="{{ collection.image.url }}"
+                                                     alt=""><span>{{ collection.category.title }}</span></a>
+        {% endfor %}
+    </section>
+{% endif %}
 
-{% for collection in collections %}
-    <a href="#" class="collection-item"><img src="{{ collection.image.url }}" alt=""><span>{{ collection.category.title }}</span></a>
-{% endfor %}
