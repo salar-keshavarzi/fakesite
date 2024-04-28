@@ -1,8 +1,4 @@
 {% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
-{% endblock %}
 {% block content %}
     <div class="login-form-container">
         <h1 class="title">ورود | ثبت نام</h1>
@@ -15,9 +11,7 @@
     <script>
         const step = '{{ step|default:1 }}'
         const remaining_time = parseInt('{{ remaining_time|default:0 }}')
-        console.log(remaining_time)
         let last_timer = null
-        console.log(step)
         if (remaining_time) {
             startTimer(remaining_time)
         }
@@ -78,7 +72,6 @@
                 loader.style.display = 'block'
                 postReq('{% url 'login-api' %}', data = {phone_number: phone_number.value})
                     .then(({statusCode, data}) => {
-                        console.log(data)
                         if (statusCode === 429) {
                             const {days, hours, minutes, seconds} = getTimeFromSeconds(parseInt(data.retryAfter))
                             const timeString = days + ' روز ' + hours + ' ساعت ' + minutes + ' دقیقه ' + seconds + ' ثانیه '
@@ -96,7 +89,6 @@
                             if (!resendBtn.classList.contains('disabled')) {
                                 resendBtn.classList.add('disabled')
                             }
-                            console.log('code sent')
                         } else {
                             showMessage(null, 'عملیات ناموفق', 'error')
                         }

@@ -13,6 +13,19 @@ from product.models import Product, Inventory
 class Basket(BaseModel):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid.uuid4)
 
+    def validate_inventories(self):
+        flag = True
+        basket_lines = self.get_basket_lines()
+        for basket_line in basket_lines:
+            if basket_line.quantity > basket_line.inventory.quantity:
+                flag = False
+                if basket_line.inventory.quantity == 0:
+                    basket_line.delete()
+                else:
+                    basket_line.quantity = basket_line.inventory.quantity
+                    basket_line.save()
+        return flag
+
     def get_package_price(self):
         total_price = 0
         basket_lines = BasketLine.objects.filter(basket=self)
@@ -41,8 +54,16 @@ class Basket(BaseModel):
         return BasketLine.objects.filter(basket=self).aggregate(total_quantity=Coalesce(Sum('quantity'), 0)).get(
             'total_quantity', 0)
 
-    def clear(self):
-        BasketLine.objects.filter(basket=self).delete()
+    def clear_and_update_inventories(self):
+        basket_lines = self.get_basket_lines()
+        for basket_line in basket_lines:
+            if basket_line.inventory.quantity - basket_line.quantity >= 0:
+                basket_line.inventory.quantity -= basket_line.quantity
+            else:
+                basket_line.inventory.quantity = 0
+            basket_line.inventory.save()
+            basket_line.delete()
+        basket_lines.delete()
 
     def __str__(self):
         return f"{self.id}-basket"

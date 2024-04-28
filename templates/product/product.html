@@ -1,8 +1,4 @@
 {% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/product.css' %}">
-{% endblock %}
 {% block map %}
     <a href="{% url 'home' %}">روژی شاپ</a>
     <a href="{% url 'product_list' %}">محصولات</a>
@@ -49,7 +45,6 @@
                             const sizeElements = document.querySelectorAll('.size-list .item')
                             let sizeItems = []
                             sizeElements.forEach(sizeElement => {
-                                console.log(sizeItems.indexOf(sizeElement.getAttribute('data-size')))
                                 if (sizeItems.indexOf(sizeElement.getAttribute('data-size')) !== -1) {
                                     sizeElement.remove()
                                 } else {
@@ -102,18 +97,12 @@
                             })
                         </script>
                     {% endif %}
-                    <p class="attribute">
-                        <span class="name">جنس</span>
-                        <span class="content">پلی استر</span>
-                    </p>
-                    <p class="attribute">
-                        <span class="name">رنگ</span>
-                        <span class="content">قرمز</span>
-                    </p>
-                    <p class="attribute">
-                        <span class="name">برند</span>
-                        <span class="content">نایکی</span>
-                    </p>
+                    {% for attribute in attributes %}
+                        <p class="attribute">
+                            <span class="name">{{ attribute.title }}</span>
+                            <span class="content">{{ attribute.value }}</span>
+                        </p>
+                    {% endfor %}
                 </div>
             </div>
             <div class="order-container">
@@ -321,7 +310,6 @@
                             line['color'] === colorElement.getAttribute('data-color') &&
                             line['size'] === sizeElement.innerText
                     )
-                    console.log(basketLine)
                     if (basketLine && basketLine?.quantity > 0) {
                         quantityInput.value = basketLine.quantity
                         configContainer.classList.remove('hide')

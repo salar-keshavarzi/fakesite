@@ -515,6 +515,7 @@
     line-height: 2.2rem;
     /* gap: 2rem; */
     background-color: #fafafa;
+    border: 0.1rem solid #eee;
     border-radius: 1rem;
     padding: 1rem;
 }

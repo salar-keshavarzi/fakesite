@@ -2,8 +2,8 @@ from rest_framework import serializers
 from account.models import LoginCode, UserModel, BlockUser
 import re
 from django.utils.translation import gettext_lazy as _
-from lib.otp import send_otp
-import time
+# from lib.sms import send_otp
+# import time
 
 
 class LoginCodeSerializer(serializers.ModelSerializer):
@@ -19,19 +19,19 @@ class LoginCodeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_('The user is blocked'))
         return attr
 
-    def create(self, validated_data):
-        phone_number = validated_data['phone_number']
-        try:
-            user = UserModel.objects.get(username=phone_number)
-            new_password = UserModel.objects.make_random_password(length=6, allowed_chars='0123456789')
-            user.otp_try = 5
-            user.set_password(new_password)
-            user.save()
-        except UserModel.DoesNotExist:
-            new_password = UserModel.objects.make_random_password(length=6, allowed_chars='0123456789')
-            user = UserModel.objects.create_user(username=phone_number, password=new_password)
-        user.last_otp = int(time.time())
-        user.save()
-        send_otp(phone_number, new_password)
-        login_code = super().create(validated_data)
-        return login_code
+    # def create(self, validated_data):
+    #     phone_number = validated_data['phone_number']
+    #     try:
+    #         user = UserModel.objects.get(username=phone_number)
+    #         new_password = UserModel.objects.make_random_password(length=6, allowed_chars='0123456789')
+    #         user.otp_try = 5
+    #         user.set_password(new_password)
+    #         user.save()
+    #     except UserModel.DoesNotExist:
+    #         new_password = UserModel.objects.make_random_password(length=6, allowed_chars='0123456789')
+    #         user = UserModel.objects.create_user(username=phone_number, password=new_password)
+    #     user.last_otp = int(time.time())
+    #     user.save()
+    #     send_otp(phone_number, new_password)
+    #     login_code = super().create(validated_data)
+    #     return login_code

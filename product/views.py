@@ -45,7 +45,7 @@ class ProductListView(ListView):
         discount_percent=ExpressionWrapper(100 * F('discount') / F('first_price'),
                                            output_field=IntegerField())).all()
     ordering = ['-is_available', '-visit_count']
-    paginate_by = 2
+    paginate_by = 24
     form_class = SearchForm
 
     def get_queryset(self):
@@ -104,6 +104,7 @@ class ProductPageView(View):
         product.visit_count += 1
         product.save()
         images = ProductImage.objects.filter(product=product)
+        attributes = product.get_attributes()
         inventories = Inventory.objects.filter(product=product, quantity__gt=0).select_related('color').all()
         comments = Comment.get_by_product(product=product)
         favorite = False
@@ -115,4 +116,4 @@ class ProductPageView(View):
         return render(request, template_name='product/product.html',
                       context={'product': product, 'product_images': images, 'inventories': inventories,
                                'comments': comments, 'favorite': favorite,
-                               'comment_form': comment_form, 'reply_form': reply_form})
+                               'comment_form': comment_form, 'reply_form': reply_form, 'attributes': attributes})

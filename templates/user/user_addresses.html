@@ -1,9 +1,4 @@
-{% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
-    <link rel="stylesheet" href="{% static 'css/user_addresses.css' %}">
-{% endblock %}
+{% extends 'base/base_panel.html' %}
 {% block content %}
     <div class="user-addresses-page-container user-panel-page">
         <button class="active-navigation-btn">نمایش منوی کاربری</button>
@@ -79,12 +74,10 @@
                     {% endfor %}
                 {% else %}
                     <p class="result-not-found"
-                       style="width: 100%; text-align: center; font-size: 2.6rem; color: #727272;">
+                       style="width: 100%; text-align: center; font-size: 2rem; color: #727272;">
                         موردی یافت نشد</p>
                 {% endif %}
             </ul>
         </section>
     </div>
-{% endblock %}
-{% block pageBottom %}
 {% endblock %}

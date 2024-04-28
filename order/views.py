@@ -28,6 +28,7 @@ class UserOrder(View):
         if basket_id:
             try:
                 basket = Basket.objects.get(id=basket_id)
+                basket.validate_inventories()
                 basket_lines = BasketLine.objects.filter(basket=basket).select_related('inventory', 'product',
                                                                                        'product__seller',
                                                                                        'inventory__color',
@@ -130,6 +131,10 @@ class BuyView(View):
     def get(self, request, order_id):
         try:
             order = Order.objects.get(id=order_id)
+            if order.user != request.user:
+                raise Http404
+            if not order.basket.validate_inventories():
+                return redirect('basket')
         except Order.DoesNotExist:
             raise Http404
         order_amount = order.get_final_price()
@@ -155,8 +160,8 @@ class BuyVerifyView(View):
         authority = request.GET.get('Authority')
         status = request.GET.get('Status', 'NOK')
         if authority and status != 'NOK':
-            transaction = (Transaction.objects.filter(user=request.user, authority=authority).first()
-                           .select_related('order', 'order__address', 'order__basket'))
+            transaction = (Transaction.objects.filter(user=request.user, authority=authority)
+                           .select_related('order', 'order__address', 'order__basket').first())
             if not transaction:
                 raise Http404
             if transaction.amount == transaction.order.get_final_price():
@@ -191,7 +196,7 @@ class BuyVerifyView(View):
                     basket_id = request.COOKIES.get('basket_id')
                     if basket_id:
                         try:
-                            Basket.objects.get(id=basket_id).clear()
+                            Basket.objects.get(id=basket_id).clear_and_update_inventories()
                         except Basket.DoesNotExist:
                             pass
                     return render(request, template_name="order/confirm_buy.html",

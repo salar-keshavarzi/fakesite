@@ -1,14 +1,10 @@
 {% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/product_list.css' %}">
-{% endblock %}
 {% block content %}
     <div class="products-page-container">
         <div class="filter-container">
-            <div class="legend">
+            <button onclick="toggleShowFilters(this)" class="toggle-show-filters-btn">
                 <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                    <g stroke="#2a353d" stroke-width="1.5">
+                    <g stroke="#fff" stroke-width="1.5">
                         <g stroke-linecap="round" stroke-linejoin="round">
                             <path d="m7 21v-3"/>
                             <path d="m17 21v-6"/>
@@ -19,18 +15,54 @@
                         <path d="m17 12c-.9319 0-1.3978 0-1.7654-.1522-.49-.203-.8794-.5924-1.0824-1.0824-.1522-.3676-.1522-.83352-.1522-1.7654s0-1.39782.1522-1.76537c.203-.49005.5924-.8794 1.0824-1.08239.3676-.15224.8335-.15224 1.7654-.15224s1.3978 0 1.7654.15224c.49.20299.8794.59234 1.0824 1.08239.1522.36755.1522.83349.1522 1.76537s0 1.3978-.1522 1.7654c-.203.49-.5924.8794-1.0824 1.0824-.3676.1522-.8335.1522-1.7654.1522z"/>
                     </g>
                 </svg>
-                <p>فیلتر ها</p>
-                <a href="{% url 'product_list' %}" class="delete-filters-link">حذف فیلتر ها</a>
+                <span>فیلتر ها</span>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="20"
+                     height="20"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="#fff"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     class="arrow-svg"
+                     stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
+            <div class="filters-wrapper">
+                <div class="legend">
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="#2a353d" stroke-width="1.5">
+                            <g stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m7 21v-3"/>
+                                <path d="m17 21v-6"/>
+                                <path d="m17 6v-3"/>
+                                <path d="m7 9v-6"/>
+                            </g>
+                            <path d="m7 18c-.93188 0-1.39782 0-1.76537-.1522-.49005-.203-.8794-.5924-1.08239-1.0824-.15224-.3676-.15224-.8335-.15224-1.7654s0-1.3978.15224-1.7654c.20299-.49.59234-.8794 1.08239-1.0824.36755-.1522.83349-.1522 1.76537-.1522s1.39782 0 1.76537.1522c.49005.203.8794.5924 1.08239 1.0824.15224.3676.15224.8335.15224 1.7654s0 1.3978-.15224 1.7654c-.20299.49-.59234.8794-1.08239 1.0824-.36755.1522-.83349.1522-1.76537.1522z"/>
+                            <path d="m17 12c-.9319 0-1.3978 0-1.7654-.1522-.49-.203-.8794-.5924-1.0824-1.0824-.1522-.3676-.1522-.83352-.1522-1.7654s0-1.39782.1522-1.76537c.203-.49005.5924-.8794 1.0824-1.08239.3676-.15224.8335-.15224 1.7654-.15224s1.3978 0 1.7654.15224c.49.20299.8794.59234 1.0824 1.08239.1522.36755.1522.83349.1522 1.76537s0 1.3978-.1522 1.7654c-.203.49-.5924.8794-1.0824 1.0824-.3676.1522-.8335.1522-1.7654.1522z"/>
+                        </g>
+                    </svg>
+                    <p>فیلتر ها</p>
+                    <a href="{% url 'product_list' %}" class="delete-filters-link">حذف فیلتر ها</a>
+                </div>
+                <form action="{% url 'product_list' %}" method="get" class="filter-form">
+                    {{ form.as_div }}
+                    <button class="submit" type="submit">اعمال فیلتر</button>
+                </form>
             </div>
-            <form action="{% url 'product_list' %}" method="get" class="filter-form">
-                {{ form.as_div }}
-                <button class="submit" type="submit">اعمال فیلتر</button>
-            </form>
+            <script>
+                function toggleShowFilters(button) {
+                    document.querySelector('.filters-wrapper').classList.toggle('show-flex')
+                    button.classList.toggle('active')
+                }
+
+            </script>
         </div>
         <script>
             document.querySelectorAll('.filter-form>div').forEach(element => {
                 const hasChecked = element.querySelector('input:checked')
-                if (!hasChecked){
+                if (!hasChecked) {
                     element.classList.add('disable')
                 }
             })
@@ -76,7 +108,7 @@
                     {% endfor %}
                 {% else %}
                     <p class="result-not-found"
-                       style="width: 100%; text-align: center; font-size: 2.6rem; color: #727272;">
+                       style="width: 100%; text-align: center; font-size: 2rem; color: #727272;">
                         موردی یافت نشد</p>
                 {% endif %}
             </div>

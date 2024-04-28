@@ -1,9 +1,4 @@
-{% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/user_panel.css' %}">
-    <link rel="stylesheet" href="{% static 'css/user_address.css' %}">
-{% endblock %}
+{% extends 'base/base_panel.html' %}
 {% block content %}
     <div class="user-address-page-container user-panel-page">
         <button class="active-navigation-btn">نمایش منوی کاربری</button>
@@ -58,6 +53,4 @@
             </form>
         </section>
     </div>
-{% endblock %}
-{% block pageBottom %}
 {% endblock %}

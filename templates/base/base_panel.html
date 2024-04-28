@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% block pageBottom %}
+    <script>
+        const userNavigationContainer = document.querySelector('.user-navigate-section')
+        const activeNavigationBtn = document.querySelector('.active-navigation-btn')
+        activeNavigationBtn.onclick = () => {
+            userNavigationContainer.classList.toggle('active')
+            if (userNavigationContainer.classList.contains('active')) {
+                activeNavigationBtn.innerHTML = 'بستن منوی کاربری'
+            } else {
+                activeNavigationBtn.innerHTML = 'نمایش منوی کاربری'
+            }
+        }
+    </script>
+{% endblock %}

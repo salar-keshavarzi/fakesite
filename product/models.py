@@ -9,7 +9,7 @@ from lib.base_model import CustomImageField
 
 class Seller(BaseModel):
     name = models.CharField(max_length=48, verbose_name=_('name'))
-    phone_number = models.CharField(max_length=24, verbose_name=_('phone number'))
+    phone_number = models.CharField(max_length=24, null=True, blank=True, verbose_name=_('phone number'))
 
     def __str__(self):
         return self.name
@@ -60,7 +60,7 @@ class Product(BaseModel):
     brand = models.ForeignKey(Brand, on_delete=models.PROTECT, related_name='brands')
     visit_count = models.PositiveIntegerField(default=0, verbose_name=_('visit count'))
     buy_count = models.PositiveIntegerField(default=0, verbose_name=_('buy count'))
-    seller = models.ForeignKey(Seller, null=True, on_delete=models.SET_NULL,
+    seller = models.ForeignKey(Seller, null=True, blank=True, on_delete=models.SET_NULL,
                                related_name='products', verbose_name=_('seller'))
     objects = ProductManager()
 
@@ -111,13 +111,16 @@ class Product(BaseModel):
         result = Inventory.objects.filter(product=self).aggregate(total_quantity=Sum('quantity'))
         return result.get('total_quantity', 0)
 
+    def get_attributes(self):
+        return Attribute.objects.filter(product=self)
+
     class Meta:
         verbose_name = _('product')
         verbose_name_plural = _('products')
 
 
 class Attribute(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='products')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='attributes')
     title = models.CharField(max_length=48, verbose_name=_('attribute title'))
     value = models.CharField(max_length=48, verbose_name=_('value'))
 

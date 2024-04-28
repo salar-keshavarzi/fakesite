@@ -1,9 +1,4 @@
 {% extends 'base/base.html' %}
-{% load static %}
-{% block links %}
-    <link rel="stylesheet" href="{% static 'css/confirm_buy.css' %}">
-    <link rel="stylesheet" href="{% static 'css/order.css' %}">
-{% endblock %}
 {% block content %}
     <div class="confirm-buy-page-container">
         <div class="progress-container-wrapper">
@@ -46,9 +41,8 @@
                 <p class="hint">در صورت بروز مشکل می توانید از طریق ارسال تیکت و یا تماس با پشتیبانی به ما اطلاع
                     دهید</p>
                 <div class="btn-container">
-                    <a class="ticket-link" href="#">
+                    <a class="ticket-link" href="{% url 'user_panel_support' %}">
                         ارسال تیکت
-
                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <g fill="#292d32">
                                 <path
@@ -60,7 +54,7 @@
                             </g>
                         </svg>
                     </a>
-                    <a class="contact-link" href="#">
+                    <a class="contact-link" href="{% url 'user_panel_support' %}">
                         تماس با پشتیبانی
                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -68,7 +62,7 @@
                                     fill="#0d0d0d"/>
                         </svg>
                     </a>
-                    <a class="orders-link" href="#">
+                    <a class="orders-link" href="{% url 'user_panel_buys' %}">
                         برو به سفارش ها
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff"
                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -87,7 +81,7 @@
                     </svg>
                 </div>
                 <div class="btn-container">
-                    <a class="orders-link" href="#">
+                    <a class="orders-link" href="{% url 'user_panel_buys' %}">
                         برو به سفارش ها
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff"
                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -114,9 +108,8 @@
                 <p class="hint">در صورت بروز مشکل می توانید از طریق ارسال تیکت و یا تماس با پشتیبانی به ما اطلاع
                     دهید</p>
                 <div class="btn-container">
-                    <a class="ticket-link" href="#">
+                    <a class="ticket-link" href="{% url 'user_panel_support' %}">
                         ارسال تیکت
-
                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <g fill="#292d32">
                                 <path
@@ -128,7 +121,7 @@
                             </g>
                         </svg>
                     </a>
-                    <a class="contact-link" href="#">
+                    <a class="contact-link" href="{% url 'user_panel_support' %}">
                         تماس با پشتیبانی
                         <svg fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -136,7 +129,7 @@
                                     fill="#0d0d0d"/>
                         </svg>
                     </a>
-                    <a class="repeat-pay" href="#">
+                    <a class="repeat-pay" href="{% url 'order' %}">
                         پرداخت مجدد
                         <svg stroke-width="1.5" viewBox="0 0 24 24" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
@@ -152,7 +145,7 @@
                                     stroke="currentColor"/>
                         </svg>
                     </a>
-                    <a class="orders-link" href="#">
+                    <a class="orders-link" href="{% url 'user_panel_buys' %}">
                         برو به سفارش ها
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#fff"
                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

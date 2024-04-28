@@ -44,7 +44,6 @@
     function moveToNext(input, event) {
         const maxLength = input.getAttribute('maxlength')
         const inputValue = input.value
-        console.log(inputValue.length);
         if (inputValue.length === 0 && event.key === 'Backspace') {
             const prevInput = input.previousElementSibling
             if (prevInput) {

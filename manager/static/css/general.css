@@ -211,6 +211,10 @@ table {
     display: block !important;
 }
 
+.show-flex {
+    display: flex !important;
+}
+
 .hide {
     display: none !important;
 }
@@ -619,7 +623,7 @@ body {
 }
 
 .footer {
-    background-color: #cbd2e3;
+    background-color: #282828;
     color: #fff;
     width: 100%;
     margin: 0;
@@ -932,7 +936,8 @@ input.number {
     gap: 1rem;
     border-left: 0.1rem solid #dedede;
 }
-.mobile-nav-container .login-container{
+
+.mobile-nav-container .login-container {
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -974,6 +979,144 @@ input.number {
 }
 
 /*//////////*/
+#vanillatoasts-container {
+    position: fixed;
+    width: 32rem;
+    pointer-events: none;
+    z-index: 999999;
+}
+
+.toasts-top-right {
+    top: 0;
+    right: 0;
+}
+
+.toasts-top-left {
+    left: 0;
+    top: 0;
+}
+
+.toasts-bottom-left {
+    left: 0;
+    bottom: 0;
+}
+
+.toasts-bottom-right {
+    bottom: 0;
+    right: 0;
+}
+
+.toasts-top-center {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+}
+
+.toasts-bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.vanillatoasts-toast {
+    direction: rtl;
+    position: relative;
+    padding: 2rem 1.7rem;
+    margin: 2rem;
+    border-radius: 1rem;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 0.4rem rgba(0, 0, 0, 0.2);
+    animation-duration: 0.3s;
+    animation-name: VanillaToasts;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    pointer-events: all;
+}
+
+.vanillatoasts-fadeOut {
+    animation-name: VanillaToastsFadeOut;
+    animation-duration: 0.3s;
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    animation-fill-mode: forwards;
+}
+
+#vanillatoasts-container p,
+#vanillatoasts-container h4 {
+    margin: 0.3rem 0 !important;
+}
+
+.vanillatoasts-title {
+    font-family: vazir-bold;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #3a3a3a;
+    font-weight: normal;
+}
+
+.vanillatoasts-text {
+    font-family: vazir-medium;
+    font-size: 1.4rem;
+    color: #565656;
+}
+
+.vanillatoasts-icon {
+    position: absolute;
+    top: 0.5rem;
+    left: -4rem;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100%;
+    box-shadow: 0.1rem 0.1rem 0.3rem rgba(0, 0, 0, 0.1);
+    background: #fff;
+}
+
+.vanillatoasts-toast a,
+.vanillatoasts-toast a:hover {
+    color: #549edb !important;
+    text-decoration: none !important;
+}
+
+/** toast types */
+.vanillatoasts-success {
+    border-bottom: 0.2rem solid #51c625;
+}
+
+.vanillatoasts-warning {
+    border-bottom: 0.2rem solid #db9215;
+}
+
+.vanillatoasts-error {
+    border-bottom: 0.2rem solid #db2b1d;
+}
+
+.vanillatoasts-info {
+    border-bottom: 0.2rem solid #27abdb;
+}
+
+@keyframes VanillaToasts {
+    from {
+        transform: translate3d(40rem, 0, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes VanillaToastsFadeOut {
+    from {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate3d(40rem, 0, 0);
+        opacity: 0;
+    }
+}
+
 
 /*/////////////*/
 @media only screen and (max-width: 1150px) {
@@ -991,7 +1134,7 @@ input.number {
     }
 }
 
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 1000px) {
     html {
         font-size: 50%;
     }
@@ -1006,7 +1149,7 @@ input.number {
     }
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 800px) {
     .header .nav {
         display: none;
     }
@@ -1015,11 +1158,13 @@ input.number {
         display: block;
     }
 }
-@media only screen and (max-width: 600px){
-    .mobile-nav-container{
+
+@media only screen and (max-width: 600px) {
+    .mobile-nav-container {
         display: flex;
     }
-    .header .basket, .header .user-dropdown-container, .header .login-container{
+
+    .header .basket, .header .user-dropdown-container, .header .login-container {
         display: none;
     }
 }

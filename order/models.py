@@ -128,6 +128,16 @@ class Transaction(BaseModel):
 
 
 class Buy(BaseModel):
+    # PROCESS = 1
+    # CANCEL = 2
+    # POST = 3
+    # RECEIVE = 4
+    # STATUS = [
+    #     (PROCESS, 'در حال بررسی'),
+    #     (CANCEL, 'عدم تایید'),
+    #     (POST, 'تحویل به اداره پست'),
+    #     (RECEIVE, 'دریافت شده')
+    # ]
     user = models.ForeignKey(UserModel, on_delete=models.PROTECT, related_name='buys')
     transaction = models.ForeignKey(Transaction, on_delete=models.PROTECT, related_name='buys')
     gateway = models.ForeignKey(Gateway, on_delete=models.SET_NULL, null=True, blank=True, related_name='buys')
@@ -139,13 +149,14 @@ class Buy(BaseModel):
     shipping_price = models.PositiveIntegerField(verbose_name=_('shipping price'))
     discount_amount = models.PositiveIntegerField(verbose_name=_('discount amount'))
     total_amount = models.PositiveIntegerField(verbose_name=_('total amount'))
+    # status = models.PositiveSmallIntegerField(choices=STATUS, default=PROCESS, verbose_name=_('status'))
     tracking_code = models.CharField(max_length=64, null=True, blank=True, verbose_name=_('tracking code'))
     refund = models.BooleanField(default=False, verbose_name=_('refund'))
 
     @classmethod
     def get_by_user(cls, user):
         return ((cls.objects.filter(user=user).select_related('transaction')
-                .prefetch_related('buy_lines', 'buy_lines__product', 'buy_lines__color', 'buy_lines__size'))
+                 .prefetch_related('buy_lines', 'buy_lines__product', 'buy_lines__color', 'buy_lines__size'))
                 .order_by('-created_time'))
 
     def __str__(self):

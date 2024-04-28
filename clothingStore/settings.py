@@ -4,14 +4,10 @@ from clothingStore.local_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
 
 ALLOWED_HOSTS = ['*']
-DOMAIN = 'http://127.0.0.1:8000/' if DEBUG else 'http://rozhishop.ir/'
+
+DOMAIN = 'http://127.0.0.1:8000/' if DEBUG else 'http://www.rozhishop.ir/'
 INSTALLED_APPS = [
     "admin_persian",
     'django.contrib.admin',
@@ -132,10 +128,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 3600 * 24 * 30
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_SAMESITE = 'None'
 
 # CACHES = {
 #     'default': {
@@ -147,3 +143,6 @@ LOGIN_URL = "login"
 
 MERCHANT = "00000000-0000-0000-0000-000000000000"
 SANDBOX = True
+SEND_TRACKING_CODE = False
+SEND_BUY_MESSAGE = False
+SEND_OTP_CODE = False
