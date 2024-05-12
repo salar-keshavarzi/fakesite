@@ -21,7 +21,7 @@ from django.views.generic import TemplateView
 from account.views import LoginView, LoginAPI, LogOutView
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
+                  path('salidev/admin/', admin.site.urls),
                   path('user/', include('account.urls')),
                   path('product/', include('product.urls')),
                   path('activity/', include('activity.urls')),

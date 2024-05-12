@@ -16,7 +16,7 @@ callback_url = settings.DOMAIN + 'order/buy/verify/'
 
 def send_request(amount):
     data = {
-        "MerchantID": settings.MERCHANT,
+        "MerchantID": settings.ZP_MERCHANT,
         "Amount": amount,
         "Description": description,
         "CallbackURL": callback_url,
@@ -43,7 +43,7 @@ def send_request(amount):
 
 def verify(amount, authority):
     data = {
-        "MerchantID": settings.MERCHANT,
+        "MerchantID": settings.ZP_MERCHANT,
         "Amount": amount,
         "Authority": authority,
     }

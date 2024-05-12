@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-30 09:27+0330\n"
+"POT-Creation-Date: 2024-05-12 13:02+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: account/admin.py:13
+#: account/admin.py:16
 msgid "Personal info"
 msgstr ""
 
-#: account/admin.py:14
+#: account/admin.py:17
 msgid "Permissions"
 msgstr ""
 
-#: account/admin.py:17
+#: account/admin.py:20
 msgid "Important dates"
 msgstr ""
 
@@ -33,52 +33,125 @@ msgstr ""
 msgid "account"
 msgstr ""
 
-#: account/models.py:38
+#: account/models.py:40
 msgid "username"
 msgstr ""
 
-#: account/models.py:39
+#: account/models.py:41
 msgid "password"
 msgstr ""
 
-#: account/models.py:41
+#: account/models.py:43
 msgid "email"
 msgstr ""
 
-#: account/models.py:42
+#: account/models.py:44
 msgid "firstname"
 msgstr ""
 
-#: account/models.py:43
+#: account/models.py:45
 msgid "lastname"
 msgstr ""
 
-#: account/models.py:44
-msgid "is_active"
-msgstr ""
-
-#: account/models.py:45
-msgid "is_staff"
-msgstr ""
-
 #: account/models.py:46
-msgid "registered_time"
+msgid "human id"
 msgstr ""
 
 #: account/models.py:47
-msgid "last_login"
+msgid "is active"
 msgstr ""
 
 #: account/models.py:48
-msgid "date_joined"
+msgid "is staff"
 msgstr ""
 
-#: account/models.py:63
+#: account/models.py:49
+msgid "registered time"
+msgstr ""
+
+#: account/models.py:50
+msgid "last login"
+msgstr ""
+
+#: account/models.py:51
+msgid "date joined"
+msgstr ""
+
+#: account/models.py:52
+msgid "last otp"
+msgstr ""
+
+#: account/models.py:53
+msgid "otp try number"
+msgstr ""
+
+#: account/models.py:71
 msgid "user"
 msgstr ""
 
-#: account/models.py:64
+#: account/models.py:72
 msgid "users"
+msgstr ""
+
+#: account/models.py:77
+msgid "region"
+msgstr ""
+
+#: account/models.py:78
+msgid "city"
+msgstr ""
+
+#: account/models.py:79
+msgid "address detail"
+msgstr ""
+
+#: account/models.py:80
+msgid "receiver fullname"
+msgstr ""
+
+#: account/models.py:81
+msgid "receiver phone number"
+msgstr ""
+
+#: account/models.py:82 order/models.py:147
+msgid "zipcode"
+msgstr ""
+
+#: account/models.py:94 order/models.py:146
+msgid "address"
+msgstr ""
+
+#: account/models.py:95
+msgid "addresses"
+msgstr ""
+
+#: account/models.py:99 account/models.py:118 order/models.py:118
+#: order/models.py:145 product/models.py:12
+msgid "phone number"
+msgstr ""
+
+#: account/models.py:113
+msgid "blocked user"
+msgstr ""
+
+#: account/models.py:114
+msgid "blocked users"
+msgstr ""
+
+#: account/models.py:124
+msgid "login code"
+msgstr ""
+
+#: account/models.py:125
+msgid "login codes"
+msgstr ""
+
+#: account/serializers.py:17
+msgid "phone number is not valid"
+msgstr ""
+
+#: account/serializers.py:19
+msgid "The user is blocked"
 msgstr ""
 
 #: account/validators.py:10
@@ -90,14 +163,380 @@ msgstr ""
 msgid "%(password)s must be more that 5 digit"
 msgstr ""
 
-#: lib/base_model.py:15
+#: activity/apps.py:8
+msgid "activity"
+msgstr ""
+
+#: activity/models.py:18
+msgid "like"
+msgstr ""
+
+#: activity/models.py:19
+msgid "likes"
+msgstr ""
+
+#: activity/models.py:25 activity/models.py:43
+msgid "comment content"
+msgstr ""
+
+#: activity/models.py:36
+msgid "comment"
+msgstr ""
+
+#: activity/models.py:37
+msgid "comments"
+msgstr ""
+
+#: activity/models.py:49
+msgid "reply"
+msgstr ""
+
+#: activity/models.py:50
+msgid "replies"
+msgstr ""
+
+#: activity/models.py:55
+msgid "message"
+msgstr ""
+
+#: activity/models.py:56
+msgid "response"
+msgstr ""
+
+#: activity/models.py:57
+msgid "answered"
+msgstr ""
+
+#: activity/models.py:70
+msgid "support"
+msgstr ""
+
+#: activity/models.py:71
+msgid "supports"
+msgstr ""
+
+#: basket/apps.py:8 basket/models.py:72
+msgid "basket"
+msgstr ""
+
+#: basket/models.py:73
+msgid "baskets"
+msgstr ""
+
+#: basket/models.py:81 order/models.py:173 product/models.py:185
+msgid "quantity"
+msgstr ""
+
+#: basket/models.py:87
+msgid "basket line"
+msgstr ""
+
+#: basket/models.py:88
+msgid "basket lines"
+msgstr ""
+
+#: lib/base_model.py:19
 msgid "active"
 msgstr ""
 
-#: lib/base_model.py:16
-msgid "created_time"
+#: lib/base_model.py:20
+msgid "created time"
 msgstr ""
 
-#: lib/base_model.py:17
-msgid "modified_time"
+#: lib/base_model.py:21
+msgid "modified time"
+msgstr ""
+
+#: manager/apps.py:8
+msgid "manager"
+msgstr ""
+
+#: manager/models.py:9
+msgid "title"
+msgstr ""
+
+#: manager/models.py:10 manager/models.py:32 manager/models.py:64
+#: manager/models.py:84 product/models.py:137
+msgid "image"
+msgstr ""
+
+#: manager/models.py:12 manager/models.py:34 manager/models.py:66
+#: manager/models.py:86 product/models.py:139
+msgid "size (MB)"
+msgstr ""
+
+#: manager/models.py:25
+msgid "story category"
+msgstr ""
+
+#: manager/models.py:26
+msgid "story categories"
+msgstr ""
+
+#: manager/models.py:47
+msgid "story"
+msgstr ""
+
+#: manager/models.py:48
+msgid "stories"
+msgstr ""
+
+#: manager/models.py:52
+msgid "price"
+msgstr ""
+
+#: manager/models.py:58 order/models.py:149
+msgid "shipping price"
+msgstr ""
+
+#: manager/models.py:59
+msgid "shipping prices"
+msgstr ""
+
+#: manager/models.py:79
+msgid "collection"
+msgstr ""
+
+#: manager/models.py:80
+msgid "collections"
+msgstr ""
+
+#: manager/models.py:99
+msgid "slider"
+msgstr ""
+
+#: manager/models.py:100
+msgid "sliders"
+msgstr ""
+
+#: order/apps.py:8 order/models.py:36
+msgid "order"
+msgstr ""
+
+#: order/models.py:37
+msgid "orders"
+msgstr ""
+
+#: order/models.py:41 product/models.py:11
+msgid "name"
+msgstr ""
+
+#: order/models.py:42
+msgid "merchant id"
+msgstr ""
+
+#: order/models.py:43
+msgid "request url"
+msgstr ""
+
+#: order/models.py:44
+msgid "start pay url"
+msgstr ""
+
+#: order/models.py:45
+msgid "verify url"
+msgstr ""
+
+#: order/models.py:96
+msgid "gateway"
+msgstr ""
+
+#: order/models.py:97
+msgid "gateways"
+msgstr ""
+
+#: order/models.py:112
+msgid "amount"
+msgstr ""
+
+#: order/models.py:114
+msgid "authority code"
+msgstr ""
+
+#: order/models.py:115
+msgid "transaction number"
+msgstr ""
+
+#: order/models.py:116
+msgid "log"
+msgstr ""
+
+#: order/models.py:119
+msgid "status"
+msgstr ""
+
+#: order/models.py:120
+msgid "ip"
+msgstr ""
+
+#: order/models.py:126
+msgid "transaction"
+msgstr ""
+
+#: order/models.py:127
+msgid "transactions"
+msgstr ""
+
+#: order/models.py:144
+msgid "fullname"
+msgstr ""
+
+#: order/models.py:148
+msgid "package price"
+msgstr ""
+
+#: order/models.py:150
+msgid "discount amount"
+msgstr ""
+
+#: order/models.py:151
+msgid "total amount"
+msgstr ""
+
+#: order/models.py:153
+msgid "tracking code"
+msgstr ""
+
+#: order/models.py:154
+msgid "refund"
+msgstr ""
+
+#: order/models.py:166
+msgid "buy"
+msgstr ""
+
+#: order/models.py:167
+msgid "buys"
+msgstr ""
+
+#: order/models.py:176
+msgid "product price"
+msgstr ""
+
+#: order/models.py:185
+msgid "buy line"
+msgstr ""
+
+#: order/models.py:186
+msgid "buy lines"
+msgstr ""
+
+#: product/apps.py:8 product/models.py:118
+msgid "product"
+msgstr ""
+
+#: product/models.py:18 product/models.py:64
+msgid "seller"
+msgstr ""
+
+#: product/models.py:19
+msgid "sellers"
+msgstr ""
+
+#: product/models.py:23
+msgid "category title"
+msgstr ""
+
+#: product/models.py:29
+msgid "category"
+msgstr ""
+
+#: product/models.py:30
+msgid "categories"
+msgstr ""
+
+#: product/models.py:34
+msgid "brand title"
+msgstr ""
+
+#: product/models.py:40
+msgid "brand"
+msgstr ""
+
+#: product/models.py:41
+msgid "brands"
+msgstr ""
+
+#: product/models.py:57
+msgid "product title"
+msgstr ""
+
+#: product/models.py:58
+msgid "first price"
+msgstr ""
+
+#: product/models.py:59
+msgid "discount"
+msgstr ""
+
+#: product/models.py:61
+msgid "visit count"
+msgstr ""
+
+#: product/models.py:62
+msgid "buy count"
+msgstr ""
+
+#: product/models.py:119
+msgid "products"
+msgstr ""
+
+#: product/models.py:124
+msgid "attribute title"
+msgstr ""
+
+#: product/models.py:125
+msgid "value"
+msgstr ""
+
+#: product/models.py:131
+msgid "attribute"
+msgstr ""
+
+#: product/models.py:132
+msgid "attributes"
+msgstr ""
+
+#: product/models.py:140
+msgid "is main image"
+msgstr ""
+
+#: product/models.py:154
+msgid "product image"
+msgstr ""
+
+#: product/models.py:155
+msgid "product images"
+msgstr ""
+
+#: product/models.py:159
+msgid "color name"
+msgstr ""
+
+#: product/models.py:160
+msgid "color code (hex)"
+msgstr ""
+
+#: product/models.py:166
+msgid "color"
+msgstr ""
+
+#: product/models.py:167
+msgid "colors"
+msgstr ""
+
+#: product/models.py:171 product/models.py:177
+msgid "size"
+msgstr ""
+
+#: product/models.py:178
+msgid "sizes"
+msgstr ""
+
+#: product/models.py:191
+msgid "inventory"
+msgstr ""
+
+#: product/models.py:192
+msgid "inventories"
 msgstr ""

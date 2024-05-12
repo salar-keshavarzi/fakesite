@@ -1,4 +1,6 @@
 {% extends 'base/base.html' %}
+{% block title %} خرید {{ product.title }} با بهترین قیمت {% endblock %}
+{% block description %} خرید {{ product.title }} با بهترین کیفیت و همراه با ضمانت از فروشگاه مد و پوشاک روژی شاپ {% endblock %}
 {% block map %}
     <a href="{% url 'home' %}">روژی شاپ</a>
     <a href="{% url 'product_list' %}">محصولات</a>

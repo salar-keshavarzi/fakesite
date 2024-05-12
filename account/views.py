@@ -12,6 +12,7 @@ import time
 from lib.throttle import LoginThrottle1, LoginThrottle2
 from order.models import Buy, Transaction
 from account.forms import AddressForm, UserForm, SupportForm
+from django.conf import settings
 
 
 class LoginView(View):
@@ -23,6 +24,13 @@ class LoginView(View):
     def post(self, request):
         phone_number = request.POST.get('phone-number-hidden', None)
         otp_code = request.POST.get('otp-hidden', None)
+        if settings.SANDBOX:
+            user = UserModel.objects.filter(username=phone_number.strip()).first()
+            if user:
+                login(request, user)
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
+                return redirect('home')
         if phone_number and len(phone_number.strip()) == 11 and otp_code:
             username = phone_number.strip()
             otp = otp_code.strip()
@@ -172,7 +180,7 @@ class UserPanelSupportView(View):
         supports = Support.objects.filter(user=request.user).order_by('created_time')
         return render(request, template_name='user/user_support.html', context={'supports': supports, 'form': form})
 
-    @method_decorator(login_required())
+    @method_decorator(login_required)
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():

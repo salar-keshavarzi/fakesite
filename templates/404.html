@@ -1,4 +1,10 @@
 {% extends 'base/base.html' %}
+{% load static %}
+{% block title %}خطای 404{% endblock %}
+{% block description %}متاسفیم، صفحه‌ای که به دنبال آن می‌گردید پیدا نشد. لطفاً از منوی بالا یا جستجوی ما برای یافتن مطلب موردنظرتان استفاده کنید. اگر هنوز مشکلی دارید، با ما تماس بگیرید تا بتوانیم به شما کمک کنیم.{% endblock %}
 {% block content %}
-    <h1>صفحه ی مورد نظر یافت نشد !</h1>
+    <div class="not-found-page">
+        <img src="{% static 'icons/404.png' %}" alt="">
+        <h1>صفحه ی مورد نظر یافت نشد !</h1>
+    </div>
 {% endblock %}

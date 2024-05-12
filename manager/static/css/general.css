@@ -1095,6 +1095,26 @@ input.number {
     border-bottom: 0.2rem solid #27abdb;
 }
 
+.not-found-page {
+    width: 100%;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.not-found-page img {
+    width: 40rem;
+    border-radius: 1rem;
+}
+
+.not-found-page h1 {
+    font-size: 2.2rem;
+    font-family: vazir-medium;
+    color: #5e5e5e;
+}
+
 @keyframes VanillaToasts {
     from {
         transform: translate3d(40rem, 0, 0);
@@ -1166,5 +1186,9 @@ input.number {
 
     .header .basket, .header .user-dropdown-container, .header .login-container {
         display: none;
+    }
+
+    .not-found-page img {
+        width: 90%;
     }
 }
