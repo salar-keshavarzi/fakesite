@@ -138,7 +138,7 @@ class BuyView(View):
         except Order.DoesNotExist:
             raise Http404
         order_amount = order.get_final_price()
-        data = send_request(amount=order_amount)
+        data = send_request(amount=order_amount, request=request)
         if data['status']:
             url = data['url']
             authority = data['authority']

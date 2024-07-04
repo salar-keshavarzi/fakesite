@@ -103,7 +103,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            {% if product.is_available %}
+                            {% if product.discount_percent and product.is_available %}
                                 <span class="discount">{{ product.discount_percent }}</span>
                             {% endif %}
                         </a>

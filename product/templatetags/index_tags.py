@@ -22,7 +22,7 @@ def get_story_categories():
 
 @register.simple_tag
 def get_collections():
-    return Collection.objects.select_related('category').all()
+    return Collection.objects.all()
 
 
 @register.simple_tag

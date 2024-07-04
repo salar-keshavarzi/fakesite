@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 {% block title %} خرید {{ product.title }} با بهترین قیمت {% endblock %}
-{% block description %} خرید {{ product.title }} با بهترین کیفیت و همراه با ضمانت از فروشگاه مد و پوشاک روژی شاپ {% endblock %}
+{% block description %} خرید {{ product.title }} با بهترین کیفیت و همراه با ضمانت از فروشگاه مد و پوشاک روژی
+    شاپ {% endblock %}
 {% block map %}
     <a href="{% url 'home' %}">روژی شاپ</a>
     <a href="{% url 'product_list' %}">محصولات</a>
@@ -135,10 +136,12 @@
                     </div>
                     {% if product.is_available %}
                         <div class="currency-container">
-                            <div class="off-container">
-                                <del class="price-element">{{ product.first_price }}</del>
-                                <span class="off">% {{ product.discount_percent }} - </span>
-                            </div>
+                            {% if product.discount_percent > 0 %}
+                                <div class="off-container">
+                                    <del class="price-element">{{ product.first_price }}</del>
+                                    <span class="off">% {{ product.discount_percent }} - </span>
+                                </div>
+                            {% endif %}
                             <div class="main-price-container">
                                 <span class="main-price price-element">{{ product.get_final_price }}</span>
                                 <svg class="ms-3" width="25" height="25" viewBox="0 0 14 16" fill="none"
@@ -389,10 +392,10 @@
                         }
                         quantityInput.value = data.quantity
                     } else {
-                        showMessage(null, 'خطلایی رخ داده است', 'error')
+                        showMessage(null, 'خطایی رخ داده است', 'error')
                     }
                 }).catch(() => {
-                    showMessage(null, 'خطلایی رخ داده است', 'error')
+                    showMessage(null, 'خطایی رخ داده است', 'error')
                 }).finally(() => {
                     handleLoader('hide')
                 })
@@ -427,10 +430,10 @@
                             quantityInput.value = data.quantity
                             updateBasketQuantity(mode = 'minus')
                         } else {
-                            showMessage(null, 'خطلایی رخ داده است', 'error')
+                            showMessage(null, 'خطایی رخ داده است', 'error')
                         }
                     }).catch(() => {
-                        showMessage(null, 'خطلایی رخ داده است', 'error')
+                        showMessage(null, 'خطایی رخ داده است', 'error')
                     }).finally(() => {
                         handleLoader('hide')
                     })
@@ -450,7 +453,7 @@
                                 quantityInput.value = 0
                                 updateBasketQuantity(mode = 'minus')
                             }).catch(() => {
-                                showMessage(null, 'خطلایی رخ داده است', 'error')
+                                showMessage(null, 'خطایی رخ داده است', 'error')
                             }).finally(() => {
                                 handleLoader('hide')
                             })

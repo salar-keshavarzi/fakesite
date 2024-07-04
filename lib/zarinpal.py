@@ -1,6 +1,7 @@
 import requests
 import json
 from django.conf import settings
+from django.urls import reverse
 
 if settings.SANDBOX:
     sandbox = 'sandbox'
@@ -11,15 +12,14 @@ ZP_API_REQUEST = f"https://{sandbox}.zarinpal.com/pg/rest/WebGate/PaymentRequest
 ZP_API_VERIFY = f"https://{sandbox}.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZP_API_STARTPAY = f"https://{sandbox}.zarinpal.com/pg/StartPay/"
 description = "توضیحات مربوط به تراکنش"
-callback_url = settings.DOMAIN + 'order/buy/verify/'
 
 
-def send_request(amount):
+def send_request(amount, request):
     data = {
         "MerchantID": settings.ZP_MERCHANT,
         "Amount": amount,
         "Description": description,
-        "CallbackURL": callback_url,
+        "CallbackURL": request.build_absolute_uri(reverse('verify_buy')),
     }
     raw_data = json.dumps(data)
     headers = {'content-type': 'application/json', 'content-length': str(len(raw_data))}
@@ -28,7 +28,6 @@ def send_request(amount):
 
         if response.status_code == 200:
             response = response.json()
-            print(response)
             if response['Status'] == 100:
                 return {'status': True, 'url': ZP_API_STARTPAY + str(response['Authority']),
                         'authority': response['Authority']}
