@@ -5,7 +5,7 @@ from django.http import QueryDict, Http404
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from rest_framework.generics import ListAPIView
-
+import uuid
 from activity.forms import CommentForm, ReplyForm
 from activity.models import Comment, Like
 from product.serializers import ProductSerializer
@@ -96,6 +96,10 @@ class ProductListView(ListView):
 
 class ProductPageView(View):
     def get(self, request, product_id):
+        try:
+            uuid.UUID(product_id, version=4)
+        except ValueError:
+            raise Http404
         product = Product.objects.filter(id=product_id).annotate(
             discount_percent=ExpressionWrapper(100 * F('discount') / F('first_price'),
                                                output_field=IntegerField())).first()
