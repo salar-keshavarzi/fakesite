@@ -16,8 +16,8 @@ class SearchForm(forms.Form):
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), label_suffix="",
                                               widget=forms.CheckboxSelectMultiple(attrs={'class': 'content'}),
                                               required=False, label='دسته بندی ها')
-    brand = forms.ModelMultipleChoiceField(queryset=Brand.objects.all(), label_suffix="",
-                                           widget=forms.CheckboxSelectMultiple(attrs={'class': 'content'}),
-                                           required=False, label='برند')
+    # brand = forms.ModelMultipleChoiceField(queryset=Brand.objects.all(), label_suffix="",
+    #                                        widget=forms.CheckboxSelectMultiple(attrs={'class': 'content'}),
+    #                                        required=False, label='برند')
     order_by = forms.ChoiceField(choices=ORDERING_CHOICES, label_suffix="", widget=forms.Select(), required=False,
                                  label='مرتب سازی بر اساس')

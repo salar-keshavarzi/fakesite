@@ -67,22 +67,22 @@ WSGI_APPLICATION = 'clothingStore.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'USER': DB_USER,
-        'PORT': DB_PORT
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': DB_NAME,
+#         'PASSWORD': DB_PASSWORD,
+#         'HOST': DB_HOST,
+#         'USER': DB_USER,
+#         'PORT': DB_PORT
+#     }
+# }
 AUTH_USER_MODEL = 'account.UserModel'
 
 # AUTH_PASSWORD_VALIDATORS = [
