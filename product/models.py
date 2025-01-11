@@ -134,7 +134,8 @@ class Attribute(BaseModel):
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = CustomImageField(upload_to='products/', null=True, process_function=attach_logo, verbose_name=_('image'))
+    # image = CustomImageField(upload_to='products/', null=True, process_function=attach_logo, verbose_name=_('image'))
+    image = models.ImageField(upload_to='products/', null=True, verbose_name=_('image'))
     size = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, editable=False,
                                verbose_name=_('size (MB)'))
     is_main = models.BooleanField(default=False, verbose_name=_('is main image'))
