@@ -32,4 +32,5 @@ urlpatterns = [
                   path('login/api/', LoginAPI.as_view(), name='login-api'),
                   path('logout/', LogOutView.as_view(), name='logout'),
                   path('', TemplateView.as_view(template_name='index.html'), name='home'),
+                  path('about/', TemplateView.as_view(template_name='about-us.html'), name='about-us'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
